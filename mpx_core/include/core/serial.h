@@ -45,7 +45,7 @@ int set_serial_in(int device);
    Procedure:  Polling
    Description:   Gathers keyboard input via the serial port using
    		   the technique of polling
-*/   		   
+*/
 
 int *polling(char *buffer, int *count);
 

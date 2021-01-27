@@ -17,6 +17,7 @@
 int serial_port_out = 0;
 int serial_port_in = 0;
 
+int i = 0; // counter for polling
 /*
   Procedure..: init_serial
   Description..: Initializes devices for user interaction, logging, ...
@@ -88,15 +89,39 @@ int set_serial_in(int device)
   return NO_ERROR;
 }
 
+/*
+  Procedure..: int *polling
+  Description..: Repeatedly checks status register to see if a bit
+  has been entered, stores and prints, or does another action to the input.
+  Params: char *buffer, int *count
+*/
+
+
 int *polling(char *buffer, int *count){
-// insert your code to gather keyboard input via the technique of polling.
-// You must validat each key and handle special keys such as delete, back space, and
+//  must validate each key and handle special keys such as delete, back space, and
 // arrow keys
 
+  i = 0;
+  serial_print("$ ");
+  while (1 & ((*count) > 0))
+  {
+    if (inb(COM1+5) & 1)
+    {
+      const char ch = inb(COM1);
+      *(buffer+i) = ch; //store character in buffer array
+      serial_print(buffer+i); //print the character to the screen
+      i++; //increment counter
+      (*count)--; //decreases buffer count
 
-// remove the following line after implementing your module, this is present
-// just to allow the program to compile before R1 is complete
-strlen(buffer);
+      if (ch == '\r'){ //checks if enter key has been entered
+        *(buffer+i) = '\0';   //append a null character to output after return
+        return 0;
+      }
 
-return count;
+      //still need implementation of backspace, delete, arrow keys, and buffer size
+
+    }
+  }
+
+  return count;
 }
