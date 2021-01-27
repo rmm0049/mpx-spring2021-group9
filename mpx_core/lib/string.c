@@ -47,26 +47,26 @@ char* strcpy(char *s1, const char *s2)
 */
 int atoi(const char *s)
 {
-  int res=0; 
+  int res=0;
    int charVal=0;
-   char sign = ' '; 
+   char sign = ' ';
    char c = *s;
-   
+
 
    while(isspace(&c)){ ++s; c = *s;} // advance past whitespace
 
-   
+
    if (*s == '-' || *s == '+') sign = *(s++); // save the sign
-   
-   
-   while(*s != '\0'){ 
+
+
+   while(*s != '\0'){
         charVal = *s - 48;
- 	res = res * 10 + charVal; 
+ 	res = res * 10 + charVal;
 	s++;
 
-   } 
+   }
 
-   
+
    if ( sign == '-') res=res * -1;
 
   return res; // return integer
@@ -90,6 +90,20 @@ int strcmp(const char *s1, const char *s2)
     ++s2;
   }
   return ( *(unsigned char *)s1 - *(unsigned char *)s2 );
+}
+
+int strncmp(const char *s1, const char *s2, size_t n)
+{
+  while (n && *s1 && (*s1 == *s2))
+  {
+    ++s1;
+    ++s2;
+    --n;
+  }
+  if (n == 0)
+    return 0;
+  else
+    return (*(unsigned char *)s1 - *(unsigned char *)s2);
 }
 
 
@@ -210,7 +224,5 @@ char* strtok(char *s1, const char *s2)
      ...
      \infty) Or feel free to completely implement sprintf
              (Read the man Page: $ man sprintf)
-   int sprintf(char *str, const char *format, ...); 
+   int sprintf(char *str, const char *format, ...);
 */
-
-

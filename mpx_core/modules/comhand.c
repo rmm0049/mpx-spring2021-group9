@@ -6,10 +6,9 @@
 
 #include "comhand.h"
 #include "mpx_supt.h"
+#include "version.h"
 #include <core/serial.h>
 #include <string.h>
-
-
 
 int comhandler()
 {
@@ -23,8 +22,6 @@ int comhandler()
     bufferSize = 99;
     sys_req(READ, COM1, cmdBuffer, &bufferSize);
 
-    //just testing
-    serial_println(cmdBuffer);
 
     /*
       Commands for R1
@@ -32,7 +29,10 @@ int comhandler()
     */
 
     //version command
-
+    if (strncmp("version",cmdBuffer,7) == 0)
+    {
+      version();
+    }
     //shutdown command
 
     //help command
