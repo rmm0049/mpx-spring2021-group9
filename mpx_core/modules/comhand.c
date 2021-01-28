@@ -15,6 +15,8 @@ int comhandler()
   char cmdBuffer[BUFFER];
   int bufferSize;
   int quit = 0;
+  int shutdown_flag = 0;
+  int count;
 
   while (!quit)
   {
@@ -25,7 +27,7 @@ int comhandler()
 
     /*
       Commands for R1
-      version, help, shutdown, getate, setdate, gettime, settime
+      version, help, shutdown, getdate, setdate, gettime, settime
     */
 
     //version command
@@ -34,13 +36,55 @@ int comhandler()
       version();
     }
     //shutdown command
+    else if (strncmp("shutdown",cmdBuffer,8) == 0 || ( (strncmp("Y", cmdBuffer,1) == 0 || strncmp("N", cmdBuffer,1) == 0) && shutdown_flag == 1) )
+    {
+      //shutdown function, needs to ask for confirmation Y or N
+      if (shutdown_flag == 0)
+      {
+        char *message = "Are you sure you want to shutdown? Y/N";
+        shutdown_flag = 1;
+        sys_req(WRITE, COM1, message, &count);
+        sys_req(WRITE, COM1, "\n", &count);
+      }
+      else
+      {
+        if (strncmp("Y", cmdBuffer,1) == 0) // if Y then quit command handler
+        {
+          quit = 1;
+        }
+        else // if not shutdown, reset the shutdown flag back to 0
+        {
+          shutdown_flag = 0;
+        }
+      }
 
+    }
     //help command
+    else if (0)
+    {
 
+    }
     //date Commands
+    else if (0)
+    {
 
+    }
     //time commands
+    else if (0)
+    {
 
+    }
+
+    //user just presses enter, doesn't enter anything
+    else if (strncmp("\r",cmdBuffer,1) == 0) {} //do nothing
+
+    //command not recognized
+    else
+    {
+      char *error = "Command not recognized";
+      sys_req(WRITE, COM1, error, &count);
+      sys_req(WRITE, COM1, "\n", &count);
+    }
 
   }
 
