@@ -113,13 +113,24 @@ int *polling(char *buffer, int *count){
       i++; //increment counter
       (*count)--; //decreases buffer count
 
+      //enter case
       if (ch == '\r'){ //checks if enter key has been entered
         *(buffer+i) = '\0';   //append a null character to output after return
         return 0;
       }
 
+      //delete case
+      if (ch == 127){ //checks if backspace key has been entered
+/*
+        *(buffer+i-1) = ' '; //exchanges the last character for an empty space
+        serial_print(buffer+i-1); //print the character to the screen
+      //  *(buffer+i-1) = '\0'; //adds an extra NUL character in place of the space
+        *(buffer+i) = ' '; //removes extra NUL character at the end of buffer
+        i--; //decrement counter
+        (*count)++; //increase buffer [might need something different in the case that too many empty spaces build up at the end]
+*/
+      }
       //still need implementation of backspace, delete, arrow keys, and buffer size
-
     }
   }
 

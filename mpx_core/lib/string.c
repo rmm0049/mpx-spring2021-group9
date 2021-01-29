@@ -47,26 +47,26 @@ char* strcpy(char *s1, const char *s2)
 */
 int atoi(const char *s)
 {
-  int res=0; 
+  int res=0;
    int charVal=0;
-   char sign = ' '; 
+   char sign = ' ';
    char c = *s;
-   
+
 
    while(isspace(&c)){ ++s; c = *s;} // advance past whitespace
 
-   
+
    if (*s == '-' || *s == '+') sign = *(s++); // save the sign
-   
-   
-   while(*s != '\0'){ 
+
+
+   while(*s != '\0'){
         charVal = *s - 48;
- 	res = res * 10 + charVal; 
+ 	res = res * 10 + charVal;
 	s++;
 
-   } 
+   }
 
-   
+
    if ( sign == '-') res=res * -1;
 
   return res; // return integer
@@ -123,6 +123,7 @@ int isspace(const char *c)
       *c == '\r' ||
       *c == '\f' ||
       *c == '\t' ||
+      *c == '\b' ||
       *c == '\v'){
     return 1;
   }
@@ -210,7 +211,5 @@ char* strtok(char *s1, const char *s2)
      ...
      \infty) Or feel free to completely implement sprintf
              (Read the man Page: $ man sprintf)
-   int sprintf(char *str, const char *format, ...); 
+   int sprintf(char *str, const char *format, ...);
 */
-
-
