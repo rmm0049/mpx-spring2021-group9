@@ -119,6 +119,8 @@ int *polling(char *buffer, int *count){
       }
 
       //still need implementation of backspace, delete, arrow keys, and buffer size
+      
+
 
     }
   }

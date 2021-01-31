@@ -7,6 +7,8 @@
 #include "comhand.h"
 #include "mpx_supt.h"
 #include "version.h"
+#include "help.h"
+#include "gettime.h"
 #include <core/serial.h>
 #include <string.h>
 
@@ -24,7 +26,6 @@ int comhandler()
     bufferSize = 99;
     sys_req(READ, COM1, cmdBuffer, &bufferSize);
 
-
     /*
       Commands for R1
       version, help, shutdown, getdate, setdate, gettime, settime
@@ -36,7 +37,7 @@ int comhandler()
       version();
     }
     //shutdown command
-    else if (strncmp("shutdown",cmdBuffer,8) == 0 || ( (strncmp("Y", cmdBuffer,1) == 0 || strncmp("N", cmdBuffer,1) == 0) && shutdown_flag == 1) )
+    else if (strncmp("shutdown",cmdBuffer,8) == 0 || ( (shutdown_flag == 1) ))
     {
       //shutdown function, needs to ask for confirmation Y or N
       if (shutdown_flag == 0)
@@ -60,16 +61,16 @@ int comhandler()
 
     }
     //help command
-    else if (0)
+    else if (strncmp("help", cmdBuffer, 4) == 0)
     {
-
-    }
-    //date Commands
-    else if (0)
-    {
-
+      help(cmdBuffer);
     }
     //time commands
+    else if (strncmp("gettime", cmdBuffer, 7) == 0)
+    {
+      gettime();
+    }
+    //date commands
     else if (0)
     {
 
