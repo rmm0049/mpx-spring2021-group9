@@ -95,22 +95,25 @@ int set_serial_in(int device)
   has been entered, stores and prints, or does another action to the input.
   Params: char *buffer, int *count
 */
-
+int cursor=0;
 
 int *polling(char *buffer, int *count){
 //  must validate each key and handle special keys such as delete, back space, and
 // arrow keys
 
   i = 0;
+  int j=0;
+  cursor=0;
   serial_print("$ ");
   while (1 & ((*count) > 0))
   {
     if (inb(COM1+5) & 1)
     {
-      const char ch = inb(COM1);
+      const unsigned char ch = inb(COM1);
       *(buffer+i) = ch; //store character in buffer array
       serial_print(buffer+i); //print the character to the screen
       i++; //increment counter
+      cursor++;
       (*count)--; //decreases buffer count
 
       //enter case
@@ -121,16 +124,42 @@ int *polling(char *buffer, int *count){
 
       //delete case
       if (ch == 127){ //checks if backspace key has been entered
-/*
-        *(buffer+i-1) = ' '; //exchanges the last character for an empty space
-        serial_print(buffer+i-1); //print the character to the screen
-      //  *(buffer+i-1) = '\0'; //adds an extra NUL character in place of the space
-        *(buffer+i) = ' '; //removes extra NUL character at the end of buffer
-        i--; //decrement counter
-        (*count)++; //increase buffer [might need something different in the case that too many empty spaces build up at the end]
-*/
+        serial_print("\x1B[s"); //saves the current cursor position
+        *(buffer+cursor) = '@'; //replaces the character with a deletion marker
+
+        for(j=cursor; j<1; j--){
+          serial_print("\x1B[1D"); //sets the cursor to the beginning of the line
+        }
+
+        serial_print("\x1B[K"); //clears the line
+
+        for(j=0; j == i; j++){ //goes through the buffer
+          if(*(buffer+j) != '@'){ //if the character isn't the deletion marker,
+            serial_print(buffer+j); //print the character in the buffer
+          }
+        }
+
+        serial_print("\x1B[u"); //restores corsur position
+        serial_print("\x1B[1D"); //moves cursor one to the left to account for the character backspaced
+
       }
       //still need implementation of backspace, delete, arrow keys, and buffer size
+      if(ch == 224){
+        const unsigned char ch2 = inb(COM1);
+        if(ch2 == 115){ //checks if left arrow has been entered
+          if(cursor==0){
+            serial_print("\x1B[1C");
+          }
+          else{
+            cursor--;
+          }
+        }
+        if(ch2 == 116){ //checks if the right arrow has been entered
+          cursor++;
+
+        }
+      }
+
     }
   }
 
