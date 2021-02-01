@@ -15,7 +15,8 @@ mpx_supt.o\
 comhand.o\
 version.o\
 help.o\
-gettime.o
+gettime.o\
+getdate.o
 
 .c.s:
 	$(CC) $(CFLAGS) -S -o $@ $<

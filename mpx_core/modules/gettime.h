@@ -12,5 +12,21 @@
 
 void gettime();
 
+/*
+  Procedure..: BCDToDecimal
+  Description..:converts from BCD format to decimal
+  Params..:int BCD
+*/
+
+int BCDToDecimal(int BCD);
+
+/*
+  Procedure..: DecimalToBCD
+  Description..:Converts from decimal to BCD
+  Params..:int decimal
+*/
+
+int DecimalToBCD(int decimal);
+
 
 #endif

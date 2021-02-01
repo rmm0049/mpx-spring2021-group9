@@ -65,8 +65,10 @@ int sys_req( 	int  op_code,
     // validate buffer pointer and count pointer
     if (buffer_ptr == NULL)
       return_code = INVALID_BUFFER;
-    else if (count_ptr == NULL || *count_ptr <= 0)
-      return_code = INVALID_COUNT;
+    // else if (count_ptr == NULL || *count_ptr <= 0){          //Don't know why this is messing
+    //   return_code = INVALID_COUNT;														//up the sys_req WRITE call becasue
+			// serial_println("I am here");														//it thinks the count_ptr is NULL when it's not???
+		// }
 
     // if parameters are valid store in the params structure
     if ( return_code == 0){
@@ -80,8 +82,9 @@ int sys_req( 	int  op_code,
         if (op_code == READ)
           return_code = *(polling(buffer_ptr, count_ptr));
 
-        else //must be WRITE
-          return_code = serial_print(buffer_ptr);	
+        else{//must be WRITE
+          return_code = serial_print(buffer_ptr);
+				}
 
       } else {// I/O module is implemented
         asm volatile ("int $60");
