@@ -16,7 +16,9 @@ comhand.o\
 version.o\
 help.o\
 gettime.o\
-getdate.o
+getdate.o\
+settime.o\
+setdate.o
 
 .c.s:
 	$(CC) $(CFLAGS) -S -o $@ $<

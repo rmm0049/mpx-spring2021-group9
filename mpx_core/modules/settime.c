@@ -1,0 +1,73 @@
+/*
+  ---settime.c-----
+*/
+
+#include "gettime.h"
+#include "settime.h"
+#include <core/serial.h>
+#include "mpx_supt.h"
+#include <core/io.h>
+#include <string.h>
+
+/*
+  Procedure..: settime
+  Description..:Allows user to change the time on the system
+  Params..:char *time
+*/
+
+void settime(char *time)
+{
+  char *time_space, *time_change, *time_split;
+  int i = 0, count = 10;
+  char *t[3];
+  time_space = strtok(time, " ");
+
+  while (time_space != NULL) // breaks the command into two parts for the actual time change
+  {
+    time_change = time_space;
+    time_space = strtok(NULL, " ");
+  }
+
+
+  if (strlen(time_change) != 9) //if not in the right format, just return
+  {
+    sys_req(WRITE, COM1, "not correct format\n", &count);
+    sys_req(WRITE, COM1, "Usage: settime hh:mm:ss\n", &count);
+    return;
+  }
+
+  time_change[8] = '\0'; // makes last character null it is a space for some reason
+
+  time_split = strtok(time_change, ":"); //breaks the time change into hours, minutes and seconds
+  while (time_split != NULL)
+  {
+    t[i++] = time_split;
+    time_split = strtok(NULL, ":");
+  }
+
+
+  //converts the decimal input into BCD format
+  int hours = DecimalToBCD(atoi(t[0]));
+  int minutes = DecimalToBCD(atoi(t[1]));
+  int seconds = DecimalToBCD(atoi(t[2]));
+
+  //hours
+  cli();
+  outb(0x70, 0x04);
+  outb(0x71, hours);
+  sti();
+
+  //minutes
+  cli();
+  outb(0x70, 0x02);
+  outb(0x71, minutes);
+  sti();
+
+  //seconds
+  cli();
+  outb(0x70, 0x00);
+  outb(0x71, seconds);
+  sti();
+
+
+}

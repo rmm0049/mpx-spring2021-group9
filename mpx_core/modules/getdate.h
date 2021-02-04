@@ -2,7 +2,7 @@
 #define _GETDATE_H
 
 /*
-  Procedure..: _GETDATE_H
+  Procedure..: getdate
   Description..:Outputs the current date
   Params..:None
 */

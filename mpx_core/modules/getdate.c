@@ -185,6 +185,15 @@ void getdate()
   int year_decade_dec = BCDToDecimal(year_decade);
   char year_decade_char[2];
   itoa(year_decade_dec, year_decade_char, 10);
+
+  //if decade is 00
+  if (year_decade_dec == 0)
+  {
+    sys_req(WRITE, COM1, "00", &count);
+    sys_req(WRITE, COM1, "\n", &count);
+    return;
+  }
+
   sys_req(WRITE, COM1, year_decade_char, &count);
   sys_req(WRITE, COM1, "\n", &count);
 

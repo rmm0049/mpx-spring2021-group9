@@ -10,6 +10,8 @@
 #include "help.h"
 #include "gettime.h"
 #include "getdate.h"
+#include "settime.h"
+#include "setdate.h"
 #include <core/serial.h>
 #include <string.h>
 
@@ -101,6 +103,13 @@ int comhandler()
 
       gettime();
     }
+
+    //settime command
+    else if (strncmp("settime", cmdBuffer, 7) == 0)
+    {
+      settime(cmdBuffer);
+    }
+
     //date commands
     else if (strncmp("getdate", cmdBuffer, 7) == 0)
     {
@@ -120,6 +129,12 @@ int comhandler()
         continue;
 
       getdate();
+    }
+
+    //setdate command
+    else if (strncmp("setdate", cmdBuffer, 7) == 0)
+    {
+      setdate(cmdBuffer);
     }
 
     //user just presses enter, doesn't enter anything
