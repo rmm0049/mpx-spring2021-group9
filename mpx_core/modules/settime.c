@@ -29,14 +29,12 @@ void settime(char *time)
   }
 
 
-  if (strlen(time_change) != 9) //if not in the right format, just return
+  if (strlen(time_change) != 8) //if not in the right format, just return
   {
     sys_req(WRITE, COM1, "not correct format\n", &count);
     sys_req(WRITE, COM1, "Usage: settime hh:mm:ss\n", &count);
     return;
   }
-
-  time_change[8] = '\0'; // makes last character null it is a space for some reason
 
   time_split = strtok(time_change, ":"); //breaks the time change into hours, minutes and seconds
   while (time_split != NULL)
