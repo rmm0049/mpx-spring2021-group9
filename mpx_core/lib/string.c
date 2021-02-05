@@ -209,6 +209,7 @@ int isspace(const char *c)
       *c == '\r' ||
       *c == '\f' ||
       *c == '\t' ||
+      *c == '\b' ||
       *c == '\v'){
     return 1;
   }
