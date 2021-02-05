@@ -13,7 +13,12 @@ ASFLAGS = -f elf -g
 OBJFILES =\
 mpx_supt.o\
 comhand.o\
-version.o
+version.o\
+help.o\
+gettime.o\
+getdate.o\
+settime.o\
+setdate.o
 
 .c.s:
 	$(CC) $(CFLAGS) -S -o $@ $<

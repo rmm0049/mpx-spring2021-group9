@@ -71,6 +71,72 @@ int atoi(const char *s)
 
   return res; // return integer
 }
+
+/*
+  Procedure..: itoa
+  Description..: Convert an integer to ASCII string
+  Params..:
+*/
+
+char* itoa(int num, char *buffer, int base)
+{
+  if (base < 2 || base > 32)
+    return buffer;
+
+  int i = 0;
+  while (num)
+  {
+    int r = num % base;
+
+    if (r >= 10)
+      buffer[i++] = 65 + (r - 10);
+    else
+      buffer[i++] = 48 + r;
+
+    num = num / base;
+  }
+
+  if (i == 0)
+    buffer[i++] = '0';
+
+  if (num < 0 && base == 10)
+    buffer[i++] = '-';
+
+  buffer[i] = '\0';
+
+  return reverse(buffer, 0, i - 1);
+
+}
+
+/*
+  Procedure..: reverse
+  Description..: reverses contents of string
+  Params..: char str[], int length
+*/
+
+char* reverse(char *str, int i, int j)
+{
+  while (i < j)
+  {
+    swap(&str[i++], &str[j--]);
+  }
+  return str;
+}
+
+/*
+  Procedure..: swap
+  Description..: swaps two char values
+  Params..: char *x, char *y
+*/
+
+void swap(char *x, char *y)
+{
+  char t = *x;
+  *x = *y;
+  *y = t;
+}
+
+
 /*
   Procedure..: strcmp
   Description..: String comparison

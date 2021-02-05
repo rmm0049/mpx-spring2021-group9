@@ -7,6 +7,11 @@
 #include "comhand.h"
 #include "mpx_supt.h"
 #include "version.h"
+#include "help.h"
+#include "gettime.h"
+#include "getdate.h"
+#include "settime.h"
+#include "setdate.h"
 #include <core/serial.h>
 #include <string.h>
 
@@ -24,7 +29,6 @@ int comhandler()
     bufferSize = 99;
     sys_req(READ, COM1, cmdBuffer, &bufferSize);
 
-
     /*
       Commands for R1
       version, help, shutdown, getdate, setdate, gettime, settime
@@ -36,8 +40,23 @@ int comhandler()
       version();
     }
     //shutdown command
-    else if (strncmp("shutdown",cmdBuffer,8) == 0 || ( (strncmp("Y", cmdBuffer,1) == 0 || strncmp("N", cmdBuffer,1) == 0) && shutdown_flag == 1) )
+    else if ((strncmp("shutdown",cmdBuffer,8) == 0) || (shutdown_flag == 1))
     {
+      int i;
+      int valid = 1; //make sure valid command
+      for (i = 9; i < strlen(cmdBuffer); i++) //checks for whitespace
+      {
+        if (cmdBuffer[i] == '\0' || isspace(&cmdBuffer[i])); //can be space or null character
+        else{
+          sys_req(WRITE, COM1, "Command not recognized", &count);
+          sys_req(WRITE, COM1, "\n", &count);
+          valid = 0;
+          break;
+        }
+      }
+      if (!valid) //if not valid command continue back at top of while loop
+        continue;
+
       //shutdown function, needs to ask for confirmation Y or N
       if (shutdown_flag == 0)
       {
@@ -48,7 +67,7 @@ int comhandler()
       }
       else
       {
-        if (strncmp("Y", cmdBuffer,1) == 0) // if Y then quit command handler
+        if (strncmp("Y", cmdBuffer,1) == 0 || strncmp("y", cmdBuffer,1) == 0) // if Y then quit command handler
         {
           quit = 1;
         }
@@ -60,19 +79,62 @@ int comhandler()
 
     }
     //help command
-    else if (0)
+    else if (strncmp("help", cmdBuffer, 4) == 0)
     {
-
-    }
-    //date Commands
-    else if (0)
-    {
-
+      help(cmdBuffer);
     }
     //time commands
-    else if (0)
+    else if (strncmp("gettime", cmdBuffer, 7) == 0)
     {
+      int valid = 1; //make sure valid command
+      int i;
+      for (i = 8; i < strlen(cmdBuffer); i++) //checks for whitespace
+      {
+        if (cmdBuffer[i] == '\0' || isspace(&cmdBuffer[i])); //can be space or null character
+        else{
+          sys_req(WRITE, COM1, "Command not recognized", &count);
+          sys_req(WRITE, COM1, "\n", &count);
+          valid = 0;
+          break;
+        }
+      }
+      if (!valid) //if not valid command continue back at top of while loop
+        continue;
 
+      gettime();
+    }
+
+    //settime command
+    else if (strncmp("settime", cmdBuffer, 7) == 0)
+    {
+      settime(cmdBuffer);
+    }
+
+    //date commands
+    else if (strncmp("getdate", cmdBuffer, 7) == 0)
+    {
+      int valid = 1; //make sure valid command
+      int i;
+      for (i = 8; i < strlen(cmdBuffer); i++) //checks for whitespace
+      {
+        if (cmdBuffer[i] == '\0' || isspace(&cmdBuffer[i])); //can be space or null character
+        else{
+          sys_req(WRITE, COM1, "Command not recognized", &count);
+          sys_req(WRITE, COM1, "\n", &count);
+          valid = 0;
+          break;
+        }
+      }
+      if (!valid) //if not valid command continue back at top of while loop
+        continue;
+
+      getdate();
+    }
+
+    //setdate command
+    else if (strncmp("setdate", cmdBuffer, 7) == 0)
+    {
+      setdate(cmdBuffer);
     }
 
     //user just presses enter, doesn't enter anything

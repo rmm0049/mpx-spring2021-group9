@@ -147,6 +147,7 @@ int *polling(char *buffer, int *count){
 
       }
       //still need implementation of backspace, delete, arrow keys, and buffer size
+<<<<<<< HEAD
       if(ch == 224){
         const unsigned char ch2 = inb(COM1);
         if(ch2 == 115){ //checks if left arrow has been entered
@@ -162,6 +163,10 @@ int *polling(char *buffer, int *count){
 
         }
       }
+=======
+      
+
+>>>>>>> b236fb675ed97a82048221a98846a2b226b225b9
 
     }
   }
