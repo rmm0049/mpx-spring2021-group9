@@ -101,9 +101,9 @@ int *polling(char *buffer, int *count){
 //  must validate each key and handle special keys such as delete, back space, and
 // arrow keys
 
-  i = 0;
-  int j=0;
-  cursor=0;
+  int i = 0;
+  int j = 0;
+  cursor = 0;
   serial_print("$ ");
   while (1 & ((*count) > 0))
   {
@@ -113,7 +113,7 @@ int *polling(char *buffer, int *count){
       *(buffer+i) = ch; //store character in buffer array
       serial_print(buffer+i); //print the character to the screen
       i++; //increment counter
-      cursor++;
+      cursor++; //increment cursor 
       (*count)--; //decreases buffer count
 
       //enter case
@@ -133,13 +133,16 @@ int *polling(char *buffer, int *count){
 
         serial_print("\x1B[K"); //clears the line
 
+        int m=0;
         for(j=0; j == i; j++){ //goes through the buffer
           if(*(buffer+j) != '@'){ //if the character isn't the deletion marker,
             serial_print(buffer+j); //print the character in the buffer
+
           }
+
         }
 
-        serial_print("\x1B[u"); //restores corsur position
+        serial_print("\x1B[u"); //restores cursor position
         serial_print("\x1B[1D"); //moves cursor one to the left to account for the character backspaced
 
       }
@@ -147,7 +150,7 @@ int *polling(char *buffer, int *count){
       if(ch == 224){
         const unsigned char ch2 = inb(COM1);
         if(ch2 == 115){ //checks if left arrow has been entered
-          if(cursor==0){
+          if(cursor == 0){
             serial_print("\x1B[1C");
           }
           else{
