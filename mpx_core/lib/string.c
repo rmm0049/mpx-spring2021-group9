@@ -81,6 +81,12 @@ int atoi(const char *s)
   @param int num, char *buffer, int base
 */
 
+/*
+  Title: itoa
+  Date: 29 May 2017
+  Availability: geeksforgeeks.com/implement-itoa/
+*/
+
 char* itoa(int num, char *buffer, int base)
 {
   if (base < 2 || base > 32)
