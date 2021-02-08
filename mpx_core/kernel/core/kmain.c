@@ -1,4 +1,4 @@
-/*
+/**
   ----- kmain.c -----
 
   Description..: Kernel main. The first function called after

@@ -89,11 +89,11 @@ int set_serial_in(int device)
   return NO_ERROR;
 }
 
-/*
+/**
   Procedure..: int *polling
   Description..: Repeatedly checks status register to see if a bit
   has been entered, stores and prints, or does another action to the input.
-  Params: char *buffer, int *count
+  @param: char *buffer, int *count
 */
 int cursor=0;
 
@@ -156,10 +156,12 @@ int *polling(char *buffer, int *count){
           (*count)++; //increment how many characters left in buffer to fill
           m = 0;
 
+          serial_print("\x1B[u"); //restores cursor position
+          serial_print("\x1B[1D"); //moves cursor one to the left to account for the character backspaced
+
         }//end backspace if
 
-         serial_print("\x1B[u"); //restores cursor position
-         serial_print("\x1B[1D"); //moves cursor one to the left to account for the character backspaced
+
 
       }
 
@@ -194,7 +196,7 @@ int *polling(char *buffer, int *count){
                  }
 
                }
-               
+
                serial_print(buffer);
                i--; //decrement size of buffer
                (*count)++; //increment how many characters left in buffer to fill
