@@ -89,11 +89,11 @@ int set_serial_in(int device)
   return NO_ERROR;
 }
 
-/*
+/**
   Procedure..: int *polling
   Description..: Repeatedly checks status register to see if a bit
   has been entered, stores and prints, or does another action to the input.
-  Params: char *buffer, int *count
+  @param: char *buffer, int *count
 */
 int cursor=0;
 
@@ -114,60 +114,127 @@ int *polling(char *buffer, int *count){
 
       //enter case
       if (ch == '\r'){ //checks if enter key has been entered
-        *(buffer+i) = '\0';   //append a null character to output after return
+        if (i != 0)
+        {
+          *(buffer+i) = '\0';  //append a null character to output after return
+        }
+        else *(buffer) = '\r';
+
+        serial_print("\r");
         return 0;
       }
 
       //delete case
       else if (ch == 127){ //checks if backspace key has been entered
         serial_print("\x1B[s"); //saves the current cursor position
-        *(buffer+cursor-2) = '@'; //replaces the character with a deletion marker
-        serial_print(itoa(cursor, "", 10));
-        for(j=cursor; j>1; j--){
-          serial_print("\x1B[1D"); //sets the cursor to the beginning of the line
-        }
-        cursor=0;
+        if (cursor != 0)
+        {
+          *(buffer+cursor-1) = '@'; //replaces the character with a deletion marker
 
-        serial_print("\x1B[K"); //clears the line
-
-        for(j = 0; j <= i; j++){ //goes through the buffer
-          if(*(buffer+j) != '@'){ //if the character isn't the deletion marker,
-            *(buffer+m) = *(buffer + j);
-            m++;
+          for(j=cursor; j>=1; j--){
+            serial_print("\x1B[1D"); //sets the cursor to the beginning of the line
           }
-          else{
-            *(buffer+m) = '\0';
-          }
-        }
-        serial_print(buffer);
 
-        serial_print("\x1B[u"); //restores cursor position
-        serial_print("\x1B[1D"); //moves cursor one to the left to account for the character backspaced
+          cursor--; //decrement cursor
+
+          serial_print("\x1B[K"); //clears the line
+
+
+          for(j=0; j <= i; j++){ //goes through the buffer
+            if(*(buffer+j) != '@'){ //if the character isn't the deletion marker,
+              *(buffer+m) = *(buffer+j);
+              m++;
+            }
+            else {
+
+              *(buffer+m) = '\0';
+            }
+
+          }
+          serial_print(buffer);
+          i--; //decrement size of buffer
+          (*count)++; //increment how many characters left in buffer to fill
+          m = 0;
+
+          serial_print("\x1B[u"); //restores cursor position
+          serial_print("\x1B[1D"); //moves cursor one to the left to account for the character backspaced
+
+        }//end backspace if
+
+
 
       }
-      //still need implementation of backspace, delete, arrow keys, and buffer size
-      else if(ch == 224){
+
+      else if(ch == 27){
         const unsigned char ch2 = inb(COM1);
-        if(ch2 == 115){ //checks if left arrow has been entered
-          if(cursor == 0){
-            serial_print("\x1B[1C");
+        if(ch2 == 91){ //checks if an arrow key or delete was pressed
+          const unsigned char ch3 = inb(COM1); //gets third character
+
+          if (ch3 == 51) //delete character
+          {
+            const unsigned char ch4 = inb(COM1); //gets fourth character
+            if (ch4 == 126)
+            {
+              //Where delete does it's stuff
+              serial_print("\x1B[s"); //saves the current cursor position
+              *(buffer+cursor) = '@'; //makes the character to the right @
+
+              for(j=cursor; j>=1; j--){
+                serial_print("\x1B[1D"); //sets the cursor to the beginning of the line
+              }
+
+               serial_print("\x1B[K"); //clears the line
+
+               for(j=0; j <= i; j++){ //goes through the buffer
+                 if(*(buffer+j) != '@'){ //if the character isn't the deletion marker,
+                   *(buffer+m) = *(buffer+j);
+                   m++;
+                 }
+                 else {
+
+                   *(buffer+m) = '\0';
+                 }
+
+               }
+
+               serial_print(buffer);
+               i--; //decrement size of buffer
+               (*count)++; //increment how many characters left in buffer to fill
+               m = 0;
+
+               serial_print("\x1B[u"); //restores cursor position
+            }
           }
-          else{
-            cursor--;
+
+          if (ch3 == 65); // Down arrow don't do anything
+
+          else if (ch3 == 66); //Up arrow don't do anything
+
+          else if (ch3 == 68) //left arrow
+          {
+              if (cursor != 0) //if cursor is 0 don't go past $
+              {
+                serial_print("\x1B[1D"); //move to left
+                cursor--;
+              }
+
           }
-        }
-        if(ch2 == 116){ //checks if the right arrow has been entered
-          cursor++;
+          else if (ch3 == 67) //right arrow
+          {
+            serial_print("\x1B[1C"); //move to right
+            cursor++;
+          }
 
         }
       }
-      else{
+      else {
         *(buffer+i) = ch; //store character in buffer array
         serial_print(buffer+i); //print the character to the screen
         i++; //increment counter
         cursor++; //increment cursor
         (*count)--; //decreases buffer count
       }
+
     }
   }
 

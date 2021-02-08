@@ -144,12 +144,12 @@ void setdate(char *date)
   sti();
 
   //year need to break it up
-  if (strlen(year) != 5)
+  if (strlen(year) != 4)
   {
     serial_println("Invalid format");
     return;
   }
-  year[4] = '\0';
+  
 
   int year_int = atoi(year);
 
