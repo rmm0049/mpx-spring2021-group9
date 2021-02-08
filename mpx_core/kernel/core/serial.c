@@ -1,7 +1,7 @@
-/*
-  ----- serial.c -----
+/**
+  @file serial.c
 
-  Description..: Contains methods and variables used for
+  Contains methods and variables used for
     serial input and output.
 */
 
@@ -13,14 +13,15 @@
 
 #define NO_ERROR 0
 
-// Active devices used for serial I/O
+/// Active devices used for serial output
 int serial_port_out = 0;
+/// Active devices used for serial output
 int serial_port_in = 0;
 
-int i = 0; // counter for polling
-/*
-  Procedure..: init_serial
-  Description..: Initializes devices for user interaction, logging, ...
+int i = 0; //!< counter for polling
+/**
+  @brief Initializes serial device
+  @param int device
 */
 int init_serial(int device)
 {
@@ -35,10 +36,10 @@ int init_serial(int device)
   return NO_ERROR;
 }
 
-/*
-  Procedure..: serial_println
-  Description..: Writes a message to the active serial output device.
+/**
+    Writes a message to the active serial output device.
     Appends a newline character.
+    @param const char *msg
 */
 int serial_println(const char *msg)
 {
@@ -51,9 +52,10 @@ int serial_println(const char *msg)
   return NO_ERROR;
 }
 
-/*
-  Procedure..: serial_print
-  Description..: Writes a message to the active serial output device.
+/**
+
+  Writes a message to the active serial output device.
+    @param const char *msg
 */
 int serial_print(const char *msg)
 {
@@ -65,11 +67,13 @@ int serial_print(const char *msg)
   return NO_ERROR;
 }
 
-/*int (*student_read)(char *buffer, int *count);
-  Procedure..: set_serial_out
-  Description..: Sets serial_port_out to the given device address.
+/*int (*student_read)(char *buffer, int *count); */
+
+/**
+    Sets serial_port_out to the given device address.
     All serial output, such as that from serial_println, will be
     directed to this device.
+    @param int device
 */
 int set_serial_out(int device)
 {
@@ -77,11 +81,12 @@ int set_serial_out(int device)
   return NO_ERROR;
 }
 
-/*
-  Procedure..: set_serial_in
-  Description..: Sets serial_port_in to the given device address.
+/**
+
+   Sets serial_port_in to the given device address.
     All serial input, such as console input via a virtual machine,
     QEMU/Bochs/etc, will be directed to this device.
+    @param int device
 */
 int set_serial_in(int device)
 {
@@ -89,13 +94,14 @@ int set_serial_in(int device)
   return NO_ERROR;
 }
 
+
+///Keepts track of the cursor position in the terminal
+int cursor=0;
 /**
-  Procedure..: int *polling
-  Description..: Repeatedly checks status register to see if a bit
+  Repeatedly checks status register to see if a bit
   has been entered, stores and prints, or does another action to the input.
   @param: char *buffer, int *count
 */
-int cursor=0;
 
 int *polling(char *buffer, int *count){
 //  must validate each key and handle special keys such as delete, back space, and
@@ -221,8 +227,10 @@ int *polling(char *buffer, int *count){
           }
           else if (ch3 == 67) //right arrow
           {
-            serial_print("\x1B[1C"); //move to right
-            cursor++;
+            if (i != cursor){ //doesn't allow user to go past the length of string
+              serial_print("\x1B[1C"); //move to right
+              cursor++;
+            }
           }
 
         }

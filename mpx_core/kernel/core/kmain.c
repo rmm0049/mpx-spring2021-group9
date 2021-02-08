@@ -1,7 +1,7 @@
 /**
-  ----- kmain.c -----
+   @file kmain.c
 
-  Description..: Kernel main. The first function called after
+   Kernel main. The first function called after
       the bootloader. Initialization of hardware, system
       structures, devices, and initial processes happens here.
 
@@ -32,9 +32,9 @@ void kmain(void)
    // char *boot_loader_name = (char*)((long*)mbd)[16];
 
 
-   // 0) Initialize Serial I/O
+   //Initialize Serial I/O
    // functions to initialize serial I/O can be found in serial.c
-   // there are 3 functions to call
+   // there are 3 functions to call */
 
    init_serial(COM1);
    set_serial_out(COM1);

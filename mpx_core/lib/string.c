@@ -1,3 +1,8 @@
+/**
+  @file string.c
+  Implementation of C string functions
+*/
+
 #include <system.h>
 #include <string.h>
 
@@ -16,10 +21,11 @@
  * ************************************ */
 
 
-/*
-  Procedure..: strlen
-  Description..: Returns the length of a string.
-  Params..: s-input string
+
+
+/**
+ Returns the length of a string.
+  @param const char *s
 */
 int strlen(const char *s)
 {
@@ -28,10 +34,9 @@ int strlen(const char *s)
   return r1;//return length of string
 }
 
-/*
-  Procedure..: strcpy
-  Description..: Copy one string to another.
-  Params..: s1-destination, s2-source
+/**
+  Copy one string to another.
+  @param char *s1-destination, char *s2-source
 */
 char* strcpy(char *s1, const char *s2)
 {
@@ -40,10 +45,9 @@ char* strcpy(char *s1, const char *s2)
   return rc; // return pointer to destination string
 }
 
-/*
-  Procedure..: atoi
-  Description..: Convert an ASCII string to an integer
-  Params..: const char *s -- String
+/**
+  Convert an ASCII string to an integer
+  @param const char *s
 */
 int atoi(const char *s)
 {
@@ -72,10 +76,9 @@ int atoi(const char *s)
   return res; // return integer
 }
 
-/*
-  Procedure..: itoa
-  Description..: Convert an integer to ASCII string
-  Params..:
+/**
+  Convert an integer to ASCII string
+  @param int num, char *buffer, int base
 */
 
 char* itoa(int num, char *buffer, int base)
@@ -108,10 +111,9 @@ char* itoa(int num, char *buffer, int base)
 
 }
 
-/*
-  Procedure..: reverse
-  Description..: reverses contents of string
-  Params..: char str[], int length
+/**
+  reverses contents of string
+  @param char *str, int i, int j
 */
 
 char* reverse(char *str, int i, int j)
@@ -123,10 +125,9 @@ char* reverse(char *str, int i, int j)
   return str;
 }
 
-/*
-  Procedure..: swap
-  Description..: swaps two char values
-  Params..: char *x, char *y
+/**
+ swaps two char values
+  @param char *x, char *y
 */
 
 void swap(char *x, char *y)
@@ -137,10 +138,9 @@ void swap(char *x, char *y)
 }
 
 
-/*
-  Procedure..: strcmp
-  Description..: String comparison
-  Params..: s1-string 1, s2-string 2
+/**
+  String comparison
+  @param const char *s1-string, const char *s2-string
 */
 int strcmp(const char *s1, const char *s2)
 {
@@ -158,10 +158,9 @@ int strcmp(const char *s1, const char *s2)
   return ( *(unsigned char *)s1 - *(unsigned char *)s2 );
 }
 
-/*
-  Procedure..: strncmp
-  Description..: String comparison for a given number of characters
-  Params..: s1-string 1, s2-string 2, n-size_t
+/**
+  String comparison for a given number of characters
+  @param const char *s1-string 1, const char *s2-string 2, n-size_t
 */
 
 int strncmp(const char *s1, const char *s2, size_t n)
@@ -184,10 +183,9 @@ int strncmp(const char *s1, const char *s2, size_t n)
     No need to tamper with these!
    --------------------------------------- */
 
-/*
-  Procedure..: strcat
-  Description..: Concatenate the contents of one string onto another.
-  Params..: s1-destination, s2-source
+/**
+  Concatenate the contents of one string onto another.
+  @param char *s1-destination, const char *s2-source
 */
 char* strcat(char *s1, const char *s2)
 {
@@ -197,10 +195,9 @@ char* strcat(char *s1, const char *s2)
   return rc;
 }
 
-/*
-  Procedure..: isspace
-  Description..: Determine if a character is whitespace.
-  Params..: c-character to check
+/**
+  Determine if a character is whitespace.
+  @param const char *c-character to check
 */
 int isspace(const char *c)
 {
@@ -216,10 +213,9 @@ int isspace(const char *c)
   return 0;
 }
 
-/*
-  Procedure..: memset
-  Description..: Set a region of memory.
-  Params..: s-destination, c-byte to write, n-count
+/**
+  Set a region of memory.
+  @param void *s-destination, int c-byte to write, size_t n-count
 */
 void* memset(void *s, int c, size_t n)
 {
@@ -230,10 +226,9 @@ void* memset(void *s, int c, size_t n)
   return s;
 }
 
-/*
-  Procedure..: strtok
-  Description..: Split string into tokens
-  Params..: s1-string, s2-delimiter
+/**
+  Split string into tokens
+  @param char *s1-string, s2-delimiter
 */
 char* strtok(char *s1, const char *s2)
 {

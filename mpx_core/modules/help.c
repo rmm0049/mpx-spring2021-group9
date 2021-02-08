@@ -1,5 +1,6 @@
-/*
-  ---help.c-------
+/**
+  @file help.c
+  Handles the help pages for all commands on the system
 */
 
 #include <core/serial.h>
@@ -8,8 +9,9 @@
 #include <string.h>
 #include "comhand.h"
 
-/*
-
+/**
+  Displays the correct help page for the given command
+  @param char *msg
 */
 
 void help(char *msg)

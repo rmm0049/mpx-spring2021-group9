@@ -1,5 +1,6 @@
-/*
-  ---settime.c-----
+/**
+  @file settime.c
+  Sets a new time given by the user
 */
 
 #include "gettime.h"
@@ -9,10 +10,9 @@
 #include <core/io.h>
 #include <string.h>
 
-/*
-  Procedure..: settime
-  Description..:Allows user to change the time on the system
-  Params..:char *time
+/**
+  Allows user to change the time on the system
+  @param char *time
 */
 
 void settime(char *time)

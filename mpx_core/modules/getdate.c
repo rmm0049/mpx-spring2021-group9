@@ -1,5 +1,6 @@
-/*
-  ----getdate.c----
+/**
+  @file getdate.c
+  Contains function getdate() to display the current date
 */
 
 #include "getdate.h"
@@ -10,7 +11,7 @@
 #include <string.h>
 
 
-/*
+/**
   Displays the current date on the machine
 */
 

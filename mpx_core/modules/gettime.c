@@ -1,5 +1,6 @@
-/*
------gettime.c-----
+/**
+ @file gettime.c
+ Contains function gettime() to display the current time
 */
 
 #include "gettime.h"
@@ -9,14 +10,14 @@
 #include <string.h>
 
 
-/*
+/**
   Gets the current time running on the system
 */
 
 void gettime()
 {
   int count = 10;
-  
+
   //hours
   outb(0x70, 0x04);
   int hour = (int) inb(0x71);
@@ -47,10 +48,20 @@ void gettime()
 
 }
 
+/**
+  Converts BCD (Binary Coded Decimal) to Decimal
+  @param int BCD
+*/
+
 int BCDToDecimal(int BCD)
 {
   return (((BCD>>4)*10) + (BCD & 0xF));
 }
+
+/**
+  Converts Decimal to BCD (Binary Coded Deciaml)
+  @param int decimal
+*/
 
 int DecimalToBCD(int decimal)
 {

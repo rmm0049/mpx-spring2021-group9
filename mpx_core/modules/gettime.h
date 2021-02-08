@@ -1,3 +1,7 @@
+/**
+  @file gettime.h
+*/
+
 #ifndef _GETTIME_H
 #define _GETTIME_H
 

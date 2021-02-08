@@ -1,3 +1,8 @@
+/**
+  @file comhand.h
+  comhand header file
+*/
+
 #ifndef _COMHAND_H
 #define _COMMAND_H
 
