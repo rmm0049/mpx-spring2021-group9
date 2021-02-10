@@ -1,7 +1,7 @@
-/*
-    -----comhand.c-------
+/**
+  @file comhand.c
 
-  Description: handles the input commands from the command line
+  handles the input commands from the command line
 */
 
 #include "comhand.h"
@@ -14,6 +14,13 @@
 #include "setdate.h"
 #include <core/serial.h>
 #include <string.h>
+
+/**
+  Calls the polling function in serial.c and interprets the
+  commands given to it
+
+*/
+
 
 int comhandler()
 {

@@ -1,5 +1,6 @@
-/*
- ---setdate.c-----
+/**
+  @file setdate.c
+  contains setdate(char *date) function to set a new date on the system
 */
 
 #include "gettime.h"
@@ -10,10 +11,9 @@
 #include <string.h>
 
 
-/*
-  Procedure..: setdate
-  Description..:sets the date to the given input
-  Params..:char *date
+/**
+  sets the date to the given input
+  @param char *date
 */
 
 void setdate(char *date)
@@ -149,7 +149,7 @@ void setdate(char *date)
     serial_println("Invalid format");
     return;
   }
-  
+
 
   int year_int = atoi(year);
 

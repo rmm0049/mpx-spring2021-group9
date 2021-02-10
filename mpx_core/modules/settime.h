@@ -1,3 +1,6 @@
+/**
+  @file settime.h
+*/
 #ifndef _SETTIME_H
 #define _SETTIME_H
 
