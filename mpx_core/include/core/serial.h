@@ -6,6 +6,11 @@
 #define COM3 0x3e8
 #define COM4 0x2e8
 
+#define DEFAULT "\x1b[0m"
+#define RED "\x1b[31m"
+#define GREEN "\x1b[32m"
+#define YELLOW "\x1b[33m"
+
 /*
   Procedure..: init_serial
   Description..: Initializes devices for user interaction, logging, ...
@@ -48,5 +53,13 @@ int set_serial_in(int device);
 */
 
 int *polling(char *buffer, int *count);
+
+void println_error(char *msg);
+void println_warning(char *msg);
+void println_confirmation(char *msg);
+void println_message(char *msg);
+
+
+void simple_print(char *msg);
 
 #endif
