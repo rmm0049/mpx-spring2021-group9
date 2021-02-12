@@ -55,8 +55,7 @@ int comhandler()
       {
         if (cmdBuffer[i] == '\0' || isspace(&cmdBuffer[i])); //can be space or null character
         else{
-          sys_req(WRITE, COM1, "Command not recognized", &count);
-          sys_req(WRITE, COM1, "\n", &count);
+          println_error("COMMAND NOT RECOGNIZED");
           valid = 0;
           break;
         }
@@ -67,10 +66,9 @@ int comhandler()
       //shutdown function, needs to ask for confirmation Y or N
       if (shutdown_flag == 0)
       {
-        char *message = "Are you sure you want to shutdown? Y/N";
+        println_warning("Are you sure you want to shutdown? Y/N");
         shutdown_flag = 1;
-        sys_req(WRITE, COM1, message, &count);
-        sys_req(WRITE, COM1, "\n", &count);
+
       }
       else
       {
@@ -126,8 +124,7 @@ int comhandler()
       {
         if (cmdBuffer[i] == '\0' || isspace(&cmdBuffer[i])); //can be space or null character
         else{
-          sys_req(WRITE, COM1, "Command not recognized", &count);
-          sys_req(WRITE, COM1, "\n", &count);
+          println_error("Command not recognized");
           valid = 0;
           break;
         }
@@ -150,9 +147,8 @@ int comhandler()
     //command not recognized
     else
     {
-      char *error = "Command not recognized";
-      sys_req(WRITE, COM1, error, &count);
-      sys_req(WRITE, COM1, "\n", &count);
+      println_error("Command not recognized");
+
     }
 
   }

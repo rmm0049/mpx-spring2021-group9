@@ -10,7 +10,7 @@
 
 #include <core/io.h>
 #include <core/serial.h>
-
+#include "modules/mpx_supt.h"
 #define NO_ERROR 0
 
 /// Active devices used for serial output
@@ -247,4 +247,32 @@ int *polling(char *buffer, int *count){
   }
 
   return count;
+}
+void println_error(char *msg){ //this method is used to set the color of the error messages to red
+  simple_print(RED); //set the text color to red
+  simple_print(msg); //print the text
+  simple_print("\n");
+  simple_print(DEFAULT); //set the text color to the default color
+}
+void println_warning(char *msg){ //this method is used to set the color of the warning messages to yellow
+  simple_print(YELLOW); //set the color of the text to yellow
+  simple_print(msg); //print the text
+  simple_print("\n");
+  simple_print(DEFAULT); //set the text color to the default color
+}
+void println_confirmation(char *msg){ //this method is used to set the color of the confirmation messages to green
+  simple_print(GREEN); //set the text color to green
+  simple_print(msg);
+  simple_print("\n"); //print the text
+  simple_print(DEFAULT); //set the text color to the default color
+}
+void println_message(char *msg){
+  simple_print(msg);
+  simple_print("\n");
+}
+
+void simple_print(char *msg){
+  int count = strlen(msg);
+  sys_req(WRITE, COM1, msg, &count);
+
 }
