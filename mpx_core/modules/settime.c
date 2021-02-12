@@ -31,7 +31,7 @@ void settime(char *time)
 
   if (strlen(time_change) != 8) //if not in the right format, just return
   {
-    sys_req(WRITE, COM1, "not correct format\n", &count);
+    println_error("Invalid format");
     sys_req(WRITE, COM1, "Usage: settime hh:mm:ss\n", &count);
     return;
   }
@@ -43,11 +43,23 @@ void settime(char *time)
     time_split = strtok(NULL, ":");
   }
 
+  int hours = atoi(t[0]);
+  int minutes = atoi(t[1]);
+  int seconds = atoi(t[2]);
+
+  //checks bounds for setting time
+  if (hours > 24 || hours < 0 || minutes > 60 || minutes < 0 || seconds > 60 || seconds < 0)
+  {
+    println_error("Invalid format, out of bounds");
+    sys_req(WRITE, COM1, "Usage: settime hh:mm:ss\n", &count);
+    return;
+  }
 
   //converts the decimal input into BCD format
-  int hours = DecimalToBCD(atoi(t[0]));
-  int minutes = DecimalToBCD(atoi(t[1]));
-  int seconds = DecimalToBCD(atoi(t[2]));
+   hours = DecimalToBCD(atoi(t[0]));
+   minutes = DecimalToBCD(atoi(t[1]));
+   seconds = DecimalToBCD(atoi(t[2]));
+
 
   //hours
   cli();

@@ -29,6 +29,40 @@ void setdate(char *date)
   year = strtok(NULL, " ");
   int week = 0;
 
+  //year need to break it up
+  if (strlen(year) != 4)
+  {
+    println_error("Invalid format");
+    return;
+  }
+
+
+  int year_int = atoi(year);
+
+  //checks bounds for years
+  if (year_int > 2100 || year_int < 1900)
+  {
+    println_error("Invalid format, year out of bounds");
+    return;
+  }
+
+  //calculate the milenium and decade based on year
+  int milenium = year_int / 100;
+  int decade = year_int % 100;
+
+
+  //milenium first two digits
+  cli();
+  outb(0x70, 0x32);
+  outb(0x71, DecimalToBCD(milenium));
+  sti();
+
+  //decade last two digits
+  cli();
+  outb(0x70, 0x09);
+  outb(0x71, DecimalToBCD(decade));
+  sti();
+
   //day of the week
   if (strncmp(dayOfWeek, "Mon", 3) == 0)
   {
@@ -60,7 +94,7 @@ void setdate(char *date)
   }
   else
   {
-    serial_println("Invalid format");
+    println_error("Invalid format, day of the week");
     return;
   }
 
@@ -73,7 +107,7 @@ void setdate(char *date)
   int day_value = atoi(day);
   if (day_value > 31 || day_value < 0)
   {
-    serial_println("Invalid format");
+    println_error("Invalid format, day out of bounds");
     return;
   }
 
@@ -134,7 +168,7 @@ void setdate(char *date)
   }
   else
   {
-    serial_println("Invalid format");
+    println_error("Invalid format, month");
     return;
   }
 
@@ -143,31 +177,5 @@ void setdate(char *date)
   outb(0x71, DecimalToBCD(month_num));
   sti();
 
-  //year need to break it up
-  if (strlen(year) != 4)
-  {
-    serial_println("Invalid format");
-    return;
-  }
-
-
-  int year_int = atoi(year);
-
-  //calculate the milenium and decade based on year
-  int milenium = year_int / 100;
-  int decade = year_int % 100;
-
-
-  //milenium first two digits
-  cli();
-  outb(0x70, 0x32);
-  outb(0x71, DecimalToBCD(milenium));
-  sti();
-
-  //decade last two digits
-  cli();
-  outb(0x70, 0x09);
-  outb(0x71, DecimalToBCD(decade));
-  sti();
 
 }
