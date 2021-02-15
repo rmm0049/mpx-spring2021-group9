@@ -18,7 +18,9 @@ help.o\
 gettime.o\
 getdate.o\
 settime.o\
-setdate.o
+setdate.o\
+pcb_func.o\
+queue.o
 
 .c.s:
 	$(CC) $(CFLAGS) -S -o $@ $<

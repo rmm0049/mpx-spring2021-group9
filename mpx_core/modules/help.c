@@ -21,7 +21,6 @@ void help(char *msg)
   //help page for version
   if (strncmp("help version", msg, 12) == 0)
   {
-    println_message("VERSION HELP PAGE");
     sys_req(WRITE, COM1, "VERSION HELP PAGE\n\n", &count);
     sys_req(WRITE, COM1, "Usage: version\n\n", &count);
     sys_req(WRITE, COM1, "Description: Displays the current version of the system.\n", &count);
