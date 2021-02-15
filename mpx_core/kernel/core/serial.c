@@ -235,6 +235,34 @@ int *polling(char *buffer, int *count){
 
         }
       }
+      else if (i != cursor)
+      {
+
+        serial_print("\x1B[s"); //saves the current cursor position
+        int k;
+        for (k = i; k >= cursor; k--)
+        {
+            *(buffer+k+1) = *(buffer+k);
+        }
+
+        *(buffer+cursor) = ch; //makes the character to the right the typed char
+
+        for(j=cursor; j>=1; j--){
+          serial_print("\x1B[1D"); //sets the cursor to the beginning of the line
+        }
+
+        serial_print("\x1B[K"); //clears the line
+
+        serial_print(buffer);
+        i++; //increment size of buffer
+        (*count)--; //decrement how many characters left in buffer to fill
+        cursor++;
+
+
+        serial_print("\x1B[u"); //restores cursor position
+        serial_print("\x1B[1C"); //moves cursor one to the right to account for the character added
+
+      }
       else {
         *(buffer+i) = ch; //store character in buffer array
         serial_print(buffer+i); //print the character to the screen
@@ -248,28 +276,57 @@ int *polling(char *buffer, int *count){
 
   return count;
 }
+
+/**
+  Prints the message in error color red
+  @param char *msg
+*/
+
 void println_error(char *msg){ //this method is used to set the color of the error messages to red
   simple_print(RED); //set the text color to red
   simple_print(msg); //print the text
   simple_print("\n");
   simple_print(DEFAULT); //set the text color to the default color
 }
+
+/**
+  Prints the message in warning color yellow
+  @param char *msg
+*/
+
 void println_warning(char *msg){ //this method is used to set the color of the warning messages to yellow
   simple_print(YELLOW); //set the color of the text to yellow
   simple_print(msg); //print the text
   simple_print("\n");
   simple_print(DEFAULT); //set the text color to the default color
 }
+
+/**
+  Prints the message in confirmation color green
+  @param char *msg
+*/
+
 void println_confirmation(char *msg){ //this method is used to set the color of the confirmation messages to green
   simple_print(GREEN); //set the text color to green
   simple_print(msg);
   simple_print("\n"); //print the text
   simple_print(DEFAULT); //set the text color to the default color
 }
+
+/**
+  Prints the message in default color and newline
+  @param char *msg
+*/
+
 void println_message(char *msg){
   simple_print(msg);
   simple_print("\n");
 }
+
+/**
+  Prints the message out to the screen
+  @param char *msg
+*/
 
 void simple_print(char *msg){
   int count = strlen(msg);
