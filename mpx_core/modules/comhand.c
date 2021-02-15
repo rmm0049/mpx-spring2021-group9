@@ -12,6 +12,7 @@
 #include "getdate.h"
 #include "settime.h"
 #include "setdate.h"
+#include "commands.h"
 #include <core/serial.h>
 #include <string.h>
 
@@ -30,6 +31,8 @@ int comhandler()
   int shutdown_flag = 0;
   int count;
 
+  sys_req(WRITE, COM1, "\n\x1b[32mFor a list of commands, type \x1b[0mcommands\n", &count);
+
   while (!quit)
   {
     memset(cmdBuffer, '\0', 100);
@@ -45,6 +48,11 @@ int comhandler()
     if (strncmp("version",cmdBuffer,7) == 0)
     {
       version();
+    }
+    //commands command
+    if (strncmp("commands",cmdBuffer,8) == 0)
+    {
+      commands();
     }
     //shutdown command
     else if ((strncmp("shutdown",cmdBuffer,8) == 0) || (shutdown_flag == 1))
