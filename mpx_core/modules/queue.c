@@ -6,7 +6,7 @@
 
 #include "queue.h"
 
-struct queue readyQueue;
-struct queue readySuspendedQueue;
-struct queue blockedQueue;
-struct queue blockedSuspendedQueue;
+queue readyQueue = {0, NULL, NULL};
+queue readySuspendedQueue = {0, NULL, NULL};
+queue blockedQueue = {0, NULL, NULL};
+queue blockedSuspendedQueue = {0, NULL, NULL};

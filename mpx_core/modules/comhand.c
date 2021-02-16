@@ -13,6 +13,8 @@
 #include "settime.h"
 #include "setdate.h"
 #include "commands.h"
+#include "temp_func.h"
+#include "queue.h"
 #include <core/serial.h>
 #include <string.h>
 
@@ -50,7 +52,7 @@ int comhandler()
       version();
     }
     //commands command
-    if (strncmp("commands",cmdBuffer,8) == 0)
+    else if (strncmp("commands",cmdBuffer,8) == 0)
     {
       commands();
     }
@@ -149,6 +151,24 @@ int comhandler()
       setdate(cmdBuffer);
     }
 
+    //temprorary PCB commands
+    else if (strncmp("create PCB", cmdBuffer, 10) == 0)
+    {
+      createPCB(cmdBuffer);
+    }
+    else if (strncmp("delete PCB", cmdBuffer, 10) == 0)
+    {
+      deletePCB(cmdBuffer);
+    }
+    else if (strncmp("block PCB", cmdBuffer, 9) == 0)
+    {
+      blockPCB(cmdBuffer);
+    }
+    else if (strncmp("unblock", cmdBuffer, 7) == 0)
+    {
+        //unblockPCB(cmdBuffer);
+    }
+
     //user just presses enter, doesn't enter anything
     else if (strncmp("\r",cmdBuffer,1) == 0) {} //do nothing
 
@@ -160,6 +180,7 @@ int comhandler()
     }
 
   }
+
 
   return 0;
 }

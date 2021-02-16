@@ -26,7 +26,7 @@
 
 typedef struct pcb
 {
-  char *name; //name of the process
+  char name[20]; //name of the process
   int class; //1 for application, 0 for system??
   int priority; //0-9 to show priority 0-low 9-high
 
@@ -34,7 +34,7 @@ typedef struct pcb
   int state; //ready, running, blocked (1,2,3)
   int suspended; //1 - suspended 0 - not suspended
 
-  char stack[STACK_SIZE]; //stack array
+  unsigned char stack[STACK_SIZE]; //stack array
   unsigned char *topStack;
   unsigned char *baseStack;
 

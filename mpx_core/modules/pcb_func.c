@@ -4,9 +4,10 @@
 */
 
 #include "pcb_func.h"
-#include "queue.c"
+#include "queue.h"
 #include "mpx_supt.h"
 #include <string.h>
+#include <core/serial.h>
 
 pcb *removed; //global pcb pointer for some odd reason ???
 pcb *temp; //no idea yo
@@ -23,18 +24,19 @@ int freePCB(pcb *pcb)
 
 pcb* setupPCB(char *name, int class, int priority)
 {
+
   pcb *pcb = allocatePCB();
-  pcb->name = name;
+  strcpy(pcb->name, name);
   pcb->class = class;
   pcb->priority = priority;
   pcb->state = READY;
   pcb->suspended = NOT_SUSP;
 
-  // char test[1024];
-  // memset(test, '\0', 1024);
-  // strcpy(pcb->stack, test);
-  // pcb->topStack = (pcb->stack);
-  // pcb->baseStack = (pcb->stack+STACK_SIZE);
+  memset(pcb->stack, 0, 1024);
+
+  pcb->topStack = (pcb->stack+STACK_SIZE);
+  pcb->baseStack = pcb->stack;
+
 
   return pcb;
 }
@@ -43,10 +45,14 @@ pcb* findPCB(char *name)
 {
   //read not suspended
   pcb *node = readyQueue.head;
+
   while (node != NULL)
   {
+
     if (strcmp(node->name, name) == 0)
+    {
       return node;
+    }
     node = node->next;
   }
 
@@ -82,6 +88,7 @@ pcb* findPCB(char *name)
 
 void insertPCB(pcb *pcb)
 {
+
   //ready not suspended queue (priority queue)
   if (pcb->state == READY && pcb->suspended == NOT_SUSP)
   {
@@ -100,6 +107,7 @@ void insertPCB(pcb *pcb)
       {
         pcb->next = readyQueue.head;
         readyQueue.head = pcb;
+        readyQueue.size++;
       }
       else
       {
@@ -146,6 +154,7 @@ void insertPCB(pcb *pcb)
       {
         pcb->next = readySuspendedQueue.head;
         readySuspendedQueue.head = pcb;
+        readySuspendedQueue.size++;
       }
       else
       {
@@ -216,7 +225,6 @@ void insertPCB(pcb *pcb)
       blockedSuspendedQueue.size++;
     }
   }
-
 }
 
 int removePCB(pcb *pcb)

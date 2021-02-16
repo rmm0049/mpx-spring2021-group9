@@ -16,5 +16,10 @@ typedef struct queue
 
 } queue;
 
+extern queue readyQueue;
+extern queue readySuspendedQueue;
+extern queue blockedQueue;
+extern queue blockedSuspendedQueue;
+
 
 #endif

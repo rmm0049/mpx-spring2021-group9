@@ -12,8 +12,6 @@
 */
 int version()
 {
-  int count; 
-  sys_req(WRITE, COM1, VERSION, &count);
-  sys_req(WRITE, COM1, "\n", &count);
+  println_message("Version R2");
   return 0;
 }
