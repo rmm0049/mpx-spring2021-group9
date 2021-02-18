@@ -28,8 +28,6 @@ void createPCB(char *params)
     return;
   }
 
-
-
   //convert priority to integer
   int priority_int = atoi(priority);
 
@@ -94,10 +92,9 @@ void deletePCB(char *name)
 
 void blockPCB(char *name)
 {
-  char *temp1, *temp2, *process;
+  char *temp1, *process;
   temp1 = strtok(name, " ");
-  temp2 = strtok(NULL, " ");
-  strncmp(temp1, temp2, 0);
+  strcmp(temp1, "");
   process = strtok(NULL, " ");
 
   pcb *blocked = findPCB(process);
@@ -109,26 +106,42 @@ void blockPCB(char *name)
     return;
   }
 
-  blocked->state = BLOCKED;
+  if (blocked->state == BLOCKED)
+  {
+    println_error("PCB is already blocked!");
+    return;
+  }
+
   removePCB(blocked);
+  blocked->state = BLOCKED;
   insertPCB(blocked);
 
 }
 
-// void unblockPCB(char *name)
-// {
-//   char *temp, *process;
-//   temp = strtok(name, " ");
-//   strncmp(temp, "", 0);
-//   process = strtok(NULL, " ");
-//
-//   pcb *unblocked = findPCB(process);
-//
-//   //name is not valid
-//   if (unblocked == NULL)
-//   {
-//     println_error("PCB doesn't exist!");
-//     return;
-//   }
-//
-// }
+void unblockPCB(char *name)
+{
+  char *temp, *process;
+  temp = strtok(name, " ");
+  strncmp(temp, "", 0);
+  process = strtok(NULL, " ");
+
+  pcb *unblocked = findPCB(process);
+
+  //name is not valid
+  if (unblocked == NULL)
+  {
+    println_error("PCB doesn't exist!");
+    return;
+  }
+
+  if (unblocked->state == READY)
+  {
+    println_error("PCB is already ready!");
+    return;
+  }
+
+  removePCB(unblocked);
+  unblocked->state = READY;
+  insertPCB(unblocked);
+
+}

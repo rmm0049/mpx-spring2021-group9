@@ -86,13 +86,13 @@ void kmain(void)
    init_paging();
 
    //Initialize queues?
-  
+
    // 6) Call YOUR command handler -  interface method
    klogv("Transferring control to commhand...");
-   serial_println("\n");
-   serial_println("Welcome to MPX, enter commands at the command prompt.");
-   serial_println("Sample commands: help, shutdown, version, gettime, getdate...");
-   serial_print("\n");
+   println_message("\n");
+   println_message("Welcome to MPX, enter commands at the command prompt.");
+   println_message("Sample commands: help, shutdown, version, gettime, getdate...");
+   println_message("\n");
    comhandler();
 
    // 7) System Shutdown on return from your command handler

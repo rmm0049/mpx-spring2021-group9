@@ -302,7 +302,7 @@ void println_warning(char *msg){ //this method is used to set the color of the w
 }
 
 /**
-  Prints the message in confirmation color green
+  Prints the message in confirmation color green with newline
   @param char *msg
 */
 
@@ -310,6 +310,17 @@ void println_confirmation(char *msg){ //this method is used to set the color of 
   simple_print(GREEN); //set the text color to green
   simple_print(msg);
   simple_print("\n"); //print the text
+  simple_print(DEFAULT); //set the text color to the default color
+}
+
+/**
+  Prints the message in confirmation color green
+  @param char *msg
+*/
+
+void print_confirmation(char *msg){ //this method is used to set the color of the confirmation messages to green
+  simple_print(GREEN); //set the text color to green
+  simple_print(msg); //print the text
   simple_print(DEFAULT); //set the text color to the default color
 }
 

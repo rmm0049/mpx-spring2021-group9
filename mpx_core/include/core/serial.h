@@ -57,6 +57,7 @@ int *polling(char *buffer, int *count);
 void println_error(char *msg);
 void println_warning(char *msg);
 void println_confirmation(char *msg);
+void print_confirmation(char *msg);
 void println_message(char *msg);
 
 

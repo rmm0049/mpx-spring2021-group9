@@ -37,7 +37,6 @@ void blockPCB(char *name);
 
 void unblockPCB(char *name);
 
-void show();
 
 
 #endif

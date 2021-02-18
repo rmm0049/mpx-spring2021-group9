@@ -11,6 +11,7 @@
 
 pcb *removed; //global pcb pointer for some odd reason ???
 pcb *temp; //no idea yo
+pcb *parent;
 
 pcb* allocatePCB()
 {
@@ -88,10 +89,10 @@ pcb* findPCB(char *name)
 
 void insertPCB(pcb *pcb)
 {
-
   //ready not suspended queue (priority queue)
   if (pcb->state == READY && pcb->suspended == NOT_SUSP)
   {
+    //first queue insertion, intializes head and tail
     if (readyQueue.size == 0)
     {
       readyQueue.head = pcb;
@@ -105,38 +106,68 @@ void insertPCB(pcb *pcb)
       //new pcb priority is already greater than head of queue
       if (pcb->priority > readyQueue.head->priority)
       {
-        pcb->next = readyQueue.head;
-        readyQueue.head = pcb;
+        pcb->next = readyQueue.head; //new PCB's next points to current head
+        readyQueue.head->previous = pcb; //sets currnet head's previous to new PCB
+        readyQueue.head = pcb; //head becomes new PCB
+        pcb->previous = NULL; //new PCB's previous becomes NULL as it's the new head
+
         readyQueue.size++;
+
       }
       else
       {
+
         temp = readyQueue.head;
-        while (temp->next != NULL && temp->next->priority <= temp->priority)
+        int prior = pcb->priority; //priority of new PCB being inserted
+
+        //Loops through to find where to insert new PCB
+        while (temp->next != NULL && temp->priority >= prior )
         {
           temp = temp->next;
         }
 
+
+        //if new PCB priority is bigger than temp, goes to previous node
+        if (temp->priority < prior)
+          temp = temp->previous;
+
+
+        //if we're inserting at the tail
         if (temp == readyQueue.tail)
         {
-          pcb->previous = readyQueue.tail;
-          readyQueue.tail->next = pcb;
-          pcb-> next = NULL;
-          readyQueue.tail = pcb;
-          readyQueue.size++;
+            //head and tail at the same thing
+            if (temp == readyQueue.head)
+            {
+              readyQueue.head->next = pcb;
+              readyQueue.tail->next = pcb;
+              pcb->previous = readyQueue.head;
+              pcb->next = NULL;
+              readyQueue.tail = pcb;
+              readyQueue.size++;
+            }
+            else
+            {
+              //normal insertion at the end of queue
+              pcb->previous = readyQueue.tail;
+              readyQueue.tail->next = pcb;
+              pcb->next = NULL;
+              readyQueue.tail = pcb;
+              readyQueue.size++;
+            }
+
         }
+        //insertion in the middle of queue
         else
         {
           pcb->next = temp->next;
           pcb->previous = temp;
-          temp->next->previous = pcb;
+          temp->next->previous = pcb; //makes node to right of temp connect back to pcb thus inserting in middle
           temp->next = pcb;
           readyQueue.size++;
         }
       }
     }
   }
-
   //ready suspended queue
   else if (pcb->state == READY && pcb->suspended == SUSPSEND)
   {
@@ -150,33 +181,65 @@ void insertPCB(pcb *pcb)
     }
     else
     {
+      //new pcb priority is already greater than head of queue
       if (pcb->priority > readySuspendedQueue.head->priority)
       {
-        pcb->next = readySuspendedQueue.head;
-        readySuspendedQueue.head = pcb;
+        pcb->next = readySuspendedQueue.head; //new PCB's next points to current head
+        readySuspendedQueue.head->previous = pcb; //sets currnet head's previous to new PCB
+        readySuspendedQueue.head = pcb; //head becomes new PCB
+        pcb->previous = NULL; //new PCB's previous becomes NULL as it's the new head
+
         readySuspendedQueue.size++;
+
       }
       else
       {
+
         temp = readySuspendedQueue.head;
-        while (temp->next != NULL && temp->next->priority <= temp->priority)
+        int prior = pcb->priority; //priority of new PCB being inserted
+
+        //Loops through to find where to insert new PCB
+        while (temp->next != NULL && temp->priority >= prior )
         {
           temp = temp->next;
         }
 
+
+        //if new PCB priority is bigger than temp, goes to previous node
+        if (temp->priority < prior)
+          temp = temp->previous;
+
+
+        //if we're inserting at the tail
         if (temp == readySuspendedQueue.tail)
         {
-          pcb->previous = readySuspendedQueue.tail;
-          readySuspendedQueue.tail->next = pcb;
-          pcb-> next = NULL;
-          readySuspendedQueue.tail = pcb;
-          readySuspendedQueue.size++;
+            //head and tail at the same thing
+            if (temp == readySuspendedQueue.head)
+            {
+              readySuspendedQueue.head->next = pcb;
+              readySuspendedQueue.tail->next = pcb;
+              pcb->previous = readySuspendedQueue.head;
+              pcb->next = NULL;
+              readySuspendedQueue.tail = pcb;
+              readySuspendedQueue.size++;
+            }
+            else
+            {
+              //normal insertion at the end of queue
+              pcb->previous = readySuspendedQueue.tail;
+              readySuspendedQueue.tail->next = pcb;
+              pcb->next = NULL;
+              readySuspendedQueue.tail = pcb;
+              readySuspendedQueue.size++;
+            }
+
         }
+        //insertion in the middle of queue
         else
         {
           pcb->next = temp->next;
           pcb->previous = temp;
-          temp->next->previous = pcb;
+          temp->next->previous = pcb; //makes node to right of temp connect back to pcb thus inserting in middle
           temp->next = pcb;
           readySuspendedQueue.size++;
         }
@@ -197,11 +260,22 @@ void insertPCB(pcb *pcb)
     }
     else
     {
-      pcb->previous = blockedQueue.tail;
-      blockedQueue.tail->next = pcb;
-      pcb-> next = NULL;
-      blockedQueue.tail = pcb;
-      blockedQueue.size++;
+      if (blockedQueue.size == 1)
+      {
+        blockedQueue.head->next = pcb;
+        pcb->previous = blockedQueue.head;
+        pcb->next = NULL;
+        blockedQueue.tail = pcb;
+        blockedQueue.size++;
+      }
+      else
+      {
+        pcb->previous = blockedQueue.tail;
+        blockedQueue.tail->next = pcb;
+        pcb-> next = NULL;
+        blockedQueue.tail = pcb;
+        blockedQueue.size++;
+      }
     }
   }
 
@@ -218,13 +292,25 @@ void insertPCB(pcb *pcb)
     }
     else
     {
-      pcb->previous = blockedSuspendedQueue.tail;
-      blockedSuspendedQueue.tail->next = pcb;
-      pcb-> next = NULL;
-      blockedSuspendedQueue.tail = pcb;
-      blockedSuspendedQueue.size++;
+      if (blockedSuspendedQueue.size == 1)
+      {
+        blockedSuspendedQueue.head->next = pcb;
+        pcb->previous = blockedSuspendedQueue.head;
+        pcb->next = NULL;
+        blockedSuspendedQueue.tail = pcb;
+        blockedSuspendedQueue.size++;
+      }
+      else
+      {
+        pcb->previous = blockedSuspendedQueue.tail;
+        blockedSuspendedQueue.tail->next = pcb;
+        pcb-> next = NULL;
+        blockedSuspendedQueue.tail = pcb;
+        blockedSuspendedQueue.size++;
+      }
     }
   }
+
 }
 
 int removePCB(pcb *pcb)
@@ -236,84 +322,125 @@ int removePCB(pcb *pcb)
   //ready not suspended queue
   if (removed->state == READY && removed->suspended == NOT_SUSP)
   {
-    if (removed == readyQueue.head)
+    if (removed == readyQueue.head && removed == readyQueue.tail)
+    {
+      readyQueue.head = NULL;
+      readyQueue.tail = NULL;
+      readyQueue.size--;
+    }
+    else if (removed == readyQueue.head)
     {
       readyQueue.head = readyQueue.head->next;
       readyQueue.size--;
     }
     else if (removed == readyQueue.tail)
     {
-      readyQueue.tail->previous->next = NULL;
-      readyQueue.tail = readyQueue.tail->previous;
+      removed->previous->next = NULL;
+      readyQueue.tail = removed->previous;
+      removed->previous = NULL;
       readyQueue.size--;
     }
     else
     {
       removed->previous->next = removed->next;
+      removed->next->previous = removed->previous;
       removed->next = NULL;
+      removed->previous = NULL;
+      readyQueue.size--;
     }
+
   }
 
   //ready suspended queue
   else if (removed->state == READY && removed->suspended == SUSPSEND)
   {
-    if (removed == readySuspendedQueue.head)
+    if (removed == readySuspendedQueue.head && removed == readySuspendedQueue.tail)
+    {
+      readySuspendedQueue.head = NULL;
+      readySuspendedQueue.tail = NULL;
+      readySuspendedQueue.size--;
+    }
+    else if (removed == readySuspendedQueue.head)
     {
       readySuspendedQueue.head = readySuspendedQueue.head->next;
       readySuspendedQueue.size--;
     }
     else if (removed == readySuspendedQueue.tail)
     {
-      readySuspendedQueue.tail->previous->next = NULL;
-      readySuspendedQueue.tail = readySuspendedQueue.tail->previous;
+      removed->previous->next = NULL;
+      readySuspendedQueue.tail = removed->previous;
+      removed->previous = NULL;
       readySuspendedQueue.size--;
     }
     else
     {
       removed->previous->next = removed->next;
+      removed->next->previous = removed->previous;
       removed->next = NULL;
+      removed->previous = NULL;
+      readySuspendedQueue.size--;
     }
   }
 
   //blocked not suspended queue
   else if (removed->state == BLOCKED && removed->suspended == NOT_SUSP)
   {
-    if (removed == blockedQueue.head)
+    if (removed == blockedQueue.head && removed == blockedQueue.tail)
+    {
+      blockedQueue.head = NULL;
+      blockedQueue.tail = NULL;
+      blockedQueue.size--;
+    }
+    else if (removed == blockedQueue.head)
     {
       blockedQueue.head = blockedQueue.head->next;
       blockedQueue.size--;
     }
     else if (removed == blockedQueue.tail)
     {
-      blockedQueue.tail->previous->next = NULL;
-      blockedQueue.tail = blockedQueue.tail->previous;
+      removed->previous->next = NULL;
+      blockedQueue.tail = removed->previous;
+      removed->previous = NULL;
       blockedQueue.size--;
     }
     else
     {
       removed->previous->next = removed->next;
+      removed->next->previous = removed->previous;
       removed->next = NULL;
+      removed->previous = NULL;
+      blockedQueue.size--;
     }
   }
 
   //blocked suspended queue
   else if (removed->state == BLOCKED && removed->suspended == SUSPSEND)
   {
-    if (removed == blockedSuspendedQueue.head)
+    if (removed == blockedSuspendedQueue.head && removed == blockedSuspendedQueue.tail)
+    {
+      blockedSuspendedQueue.head = NULL;
+      blockedSuspendedQueue.tail = NULL;
+      blockedSuspendedQueue.size--;
+    }
+    else if (removed == blockedSuspendedQueue.head)
     {
       blockedSuspendedQueue.head = blockedSuspendedQueue.head->next;
       blockedSuspendedQueue.size--;
     }
     else if (removed == blockedSuspendedQueue.tail)
     {
-      blockedSuspendedQueue.tail->previous->next = NULL;
-      blockedSuspendedQueue.tail = blockedSuspendedQueue.tail->previous;
+      removed->previous->next = NULL;
+      blockedSuspendedQueue.tail = removed->previous;
+      removed->previous = NULL;
       blockedSuspendedQueue.size--;
     }
     else
     {
       removed->previous->next = removed->next;
+      removed->next->previous = removed->previous;
       removed->next = NULL;
+      removed->previous = NULL;
+      blockedSuspendedQueue.size--;
     }
   }
 
