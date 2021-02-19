@@ -78,17 +78,9 @@ void setPCBPriority(char *name, int priority)
     return;
   }
 
-  //if it's blocked do not remove and reinsert
-  if (pcb->state == BLOCKED)
-  {
-      pcb->priority = priority;
-  }
-  else
-  {
-    removePCB(pcb);
-    pcb->priority = priority;
-    insertPCB(pcb);
-  }
+  removePCB(pcb);
+  pcb->priority = priority;
+  insertPCB(pcb);
 
 }
 
@@ -198,6 +190,13 @@ void showReadyPCB()
 
   println_warning("READY NOT SUSPENDED");
   println_message("******************************************");
+
+  if (temp == NULL)
+  {
+    println_error("Empty");
+  }
+
+
   while (temp != NULL)
   {
     flag = 1;
@@ -209,6 +208,13 @@ void showReadyPCB()
   println_warning("READY SUSPENDED");
   println_message("******************************************");
   temp = readySuspendedQueue.head;
+
+  if (temp == NULL)
+  {
+    println_error("Empty");
+  }
+
+
   while (temp != NULL)
   {
     flag = 1;
@@ -224,6 +230,12 @@ void showBlockedPCB()
   pcb *temp = blockedQueue.head;
   println_warning("BLOCKED NOT SUSPENDED");
   println_message("******************************************");
+
+  if (temp == NULL)
+  {
+    println_error("Empty");
+  }
+
   while (temp != NULL)
   {
     flag = 1;
@@ -235,6 +247,12 @@ void showBlockedPCB()
   println_message("******************************************");
   println_warning("BLOCKED SUSPENDED");
   println_message("******************************************");
+
+  if (temp == NULL)
+  {
+    println_error("Empty");
+  }
+
   temp = blockedSuspendedQueue.head;
   while (temp != NULL)
   {

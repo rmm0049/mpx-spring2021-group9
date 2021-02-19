@@ -57,6 +57,11 @@ int comhandler()
     {
       commands();
     }
+    else if (strncmp("clear", cmdBuffer, 5) == 0)
+    {
+      simple_print("\x1b[2J");
+      simple_print("\x1b[0;0f");
+    }
     //shutdown command
     else if ((strncmp("shutdown",cmdBuffer,8) == 0) || (shutdown_flag == 1))
     {
