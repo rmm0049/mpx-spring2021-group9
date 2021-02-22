@@ -21,6 +21,7 @@
 #include <mem/heap.h>
 #include <mem/paging.h>
 
+#include "modules/queue.h"
 #include "modules/mpx_supt.h"
 #include "modules/comhand.h"
 
@@ -48,7 +49,7 @@ void kmain(void)
    // you will need to call mpx_init from the mpx_supt.c
 
 
-   mpx_init(MODULE_R1); //Module 1
+   mpx_init(MODULE_R2); //Module 2
 
    // 2) Check that the boot was successful and correct when using grub
    // Comment this when booting the kernel directly using QEMU, etc.
@@ -84,8 +85,14 @@ void kmain(void)
    klogv("Initializing virtual memory...");
    init_paging();
 
+   //Initialize queues?
+
    // 6) Call YOUR command handler -  interface method
    klogv("Transferring control to commhand...");
+   println_message("\n");
+   println_message("Welcome to MPX, enter commands at the command prompt.");
+   println_message("Sample commands: help, shutdown, version, gettime, getdate...");
+   println_message("\n");
    comhandler();
 
    // 7) System Shutdown on return from your command handler

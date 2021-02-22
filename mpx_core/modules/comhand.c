@@ -13,6 +13,9 @@
 #include "settime.h"
 #include "setdate.h"
 #include "commands.h"
+#include "temp_func.h"
+#include "queue.h"
+#include "perm_pcb_comm.h"
 #include <core/serial.h>
 #include <string.h>
 
@@ -50,9 +53,14 @@ int comhandler()
       version();
     }
     //commands command
-    if (strncmp("commands",cmdBuffer,8) == 0)
+    else if (strncmp("commands",cmdBuffer,8) == 0)
     {
       commands();
+    }
+    else if (strncmp("clear", cmdBuffer, 5) == 0)
+    {
+      simple_print("\x1b[2J");
+      simple_print("\x1b[0;0f");
     }
     //shutdown command
     else if ((strncmp("shutdown",cmdBuffer,8) == 0) || (shutdown_flag == 1))
@@ -149,6 +157,63 @@ int comhandler()
       setdate(cmdBuffer);
     }
 
+    //temprorary PCB commands
+    else if (strncmp("create PCB", cmdBuffer, 10) == 0)
+    {
+      createPCB(cmdBuffer);
+    }
+    else if (strncmp("delete PCB", cmdBuffer, 10) == 0)
+    {
+      deletePCB(cmdBuffer);
+    }
+    else if (strncmp("block", cmdBuffer, 5) == 0)
+    {
+      blockPCB(cmdBuffer);
+    }
+    else if (strncmp("unblock", cmdBuffer, 7) == 0)
+    {
+        unblockPCB(cmdBuffer);
+    }
+
+    //permanent PCB commands
+    else if (strncmp("show ready", cmdBuffer, 10) == 0)
+    {
+      showReadyPCB();
+    }
+    else if (strncmp("show blocked", cmdBuffer, 12) == 0)
+    {
+      showBlockedPCB();
+    }
+    else if (strncmp("show all", cmdBuffer, 8) == 0)
+    {
+      showAllPCB();
+    }
+    else if (strncmp("show", cmdBuffer, 4) == 0)
+    {
+      showPCB(cmdBuffer);
+    }
+    else if (strncmp("suspend", cmdBuffer, 7) == 0)
+    {
+      suspendPCB(cmdBuffer);
+    }
+    else if (strncmp("resume", cmdBuffer, 6) == 0)
+    {
+      resumePCB(cmdBuffer);
+    }
+    else if (strncmp("set priority", cmdBuffer,12) == 0)
+    {
+      //split cmd buffer to gather process name and priority
+      char *proc_name, *number;
+      int num_int;
+      proc_name = strtok(cmdBuffer, " ");
+      proc_name = strtok(NULL, " ");
+      proc_name = strtok(NULL, " ");
+      number = strtok(NULL, " ");
+      num_int = atoi(number);
+
+      setPCBPriority(proc_name, num_int);
+    }
+
     //user just presses enter, doesn't enter anything
     else if (strncmp("\r",cmdBuffer,1) == 0) {} //do nothing
 
@@ -160,6 +225,7 @@ int comhandler()
     }
 
   }
+
 
   return 0;
 }

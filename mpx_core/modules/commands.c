@@ -16,36 +16,37 @@
 
 void commands()
 {
+  int count = 10;
 
-  simple_print("\n");
-  println_warning("AVAILABLE COMMANDS"); //overarching commands section
+  sys_req(WRITE, COM1, "\x1b[32mAVAILABLE COMMANDS:\n", &count); //change color to green
+  sys_req(WRITE, COM1, "   Current Version:\n", &count); //subsection of version
+  sys_req(WRITE, COM1, "      \x1b[36mversion\n", &count);
 
-  println_confirmation(" Time and Date"); //subsection of time and date
-  println_message("  gettime");
-  println_message("  getdate");
-  println_message("  settime");
-  println_message("  setdate");
+  sys_req(WRITE, COM1, "   \x1b[32mCommand Usage Help:\n", &count); //subsection of help
+  sys_req(WRITE, COM1, "      \x1b[36mhelp\n", &count);
 
-  println_confirmation(" Manipulate PCB"); //subsection of pcb manipulation
-  println_message("  create PCB");
-  println_message("  suspend");
-  println_message("  resume");
-  println_message("  block");
-  println_message("  unblock");
+  sys_req(WRITE, COM1, "   \x1b[32mShutdown Program:\n", &count); //subsection of shutdown
+  sys_req(WRITE, COM1, "      \x1b[36mshutdown\n", &count);
 
-  println_confirmation(" Show PCB"); //subsection of Show PCB
-  println_message("  show all");
-  println_message("  show ready");
-  println_message("  show blocked");
-  println_message("  show");
+  sys_req(WRITE, COM1, "   \x1b[32mTime and Date:\n", &count); //subsection of time and date
+  sys_req(WRITE, COM1, "      \x1b[36mgettime\n", &count);
+  sys_req(WRITE, COM1, "      getdate\n", &count);
+  sys_req(WRITE, COM1, "      settime\n", &count);
+  sys_req(WRITE, COM1, "      setdate\n", &count);
 
-  println_confirmation(" Current Version"); //subsection of version
-  println_message("  version");
+  sys_req(WRITE, COM1, "   \x1b[32mProcess Control Blocks:\n", &count); //subsection of permanent PCB
+  sys_req(WRITE, COM1, "      \x1b[36msuspend\n", &count);
+  sys_req(WRITE, COM1, "      resume\n", &count);
+  sys_req(WRITE, COM1, "      set priority\n", &count);
+  sys_req(WRITE, COM1, "      show\n", &count);
+  sys_req(WRITE, COM1, "      show all\n", &count);
+  sys_req(WRITE, COM1, "      show ready\n", &count);
+  sys_req(WRITE, COM1, "      show blocked\n", &count);
+  sys_req(WRITE, COM1, "      create PCB\n", &count);// temprorary PCB
+  sys_req(WRITE, COM1, "      delete PCB\n", &count);
+  sys_req(WRITE, COM1, "      block\n", &count);
+  sys_req(WRITE, COM1, "      unblock\n", &count);
 
-  println_confirmation(" Command Usage Help"); //subsection of help
-  println_message("  help");
 
-  println_confirmation(" Shutdown Program"); //subsection of shutdown
-  println_message("  shutdown");
-  simple_print("\n");
+  sys_req(WRITE, COM1, "\x1b[0m", &count); //change color back to default
 }
