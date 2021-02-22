@@ -123,7 +123,7 @@ void help(char *msg)
   else if (strncmp("help create PCB", msg, 15) == 0)
   {
     display_help(count, "create PCB",
-    "create PCB [name] [class] [priority]",
+    "create PCB [class] [name] [priority]",
     "Creates a new Process Control Block and inserts into appropriate queue.");
   }
   //help page for delete PCB
