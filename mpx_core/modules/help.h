@@ -14,4 +14,11 @@
 
 void help(char *msg);
 
+/**
+  used in help() to print help page to terminal
+  @param int count, char *name, char *usage, char *descript,
+*/
+
+void display_help(int count, char *name, char *usage, char *descript);
+
 #endif
