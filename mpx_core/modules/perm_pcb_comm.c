@@ -248,12 +248,13 @@ void showBlockedPCB()
   println_warning("BLOCKED SUSPENDED");
   println_message("******************************************");
 
+  temp = blockedSuspendedQueue.head;
   if (temp == NULL)
   {
     println_error("Empty");
   }
 
-  temp = blockedSuspendedQueue.head;
+
   while (temp != NULL)
   {
     flag = 1;

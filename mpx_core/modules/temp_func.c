@@ -11,7 +11,6 @@
 
 void createPCB(char *params)
 {
-  //  if (readyQueue.size > 0)serial_println(readyQueue.head->name);
   //split the string
   char *temp1, *temp2, *name, *class, *priority;
   temp1 = strtok(params, " ");
