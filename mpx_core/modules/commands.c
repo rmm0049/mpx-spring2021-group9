@@ -16,19 +16,36 @@
 
 void commands()
 {
-  int count = 10;
 
-  sys_req(WRITE, COM1, "\x1b[32mAVAILABLE COMMANDS:\n", &count); //change color to green
-  sys_req(WRITE, COM1, "   Time and Date\n", &count); //subsection of time and date
-  sys_req(WRITE, COM1, "      gettime\n", &count);
-  sys_req(WRITE, COM1, "      getdate\n", &count);
-  sys_req(WRITE, COM1, "      settime\n", &count);
-  sys_req(WRITE, COM1, "      setdate\n", &count);
-  sys_req(WRITE, COM1, "   Current Version\n", &count); //subsection of version
-  sys_req(WRITE, COM1, "      version\n", &count);
-  sys_req(WRITE, COM1, "   Command Usage Help\n", &count); //subsection of help
-  sys_req(WRITE, COM1, "      help\n", &count);
-  sys_req(WRITE, COM1, "   Shutdown Program\n", &count); //subsection of shutdown
-  sys_req(WRITE, COM1, "      shutdown\n", &count);
-  sys_req(WRITE, COM1, "\x1b[0m", &count); //change color back to default
+  simple_print("\n");
+  println_warning("AVAILABLE COMMANDS"); //overarching commands section
+
+  println_confirmation(" Time and Date"); //subsection of time and date
+  println_message("  gettime");
+  println_message("  getdate");
+  println_message("  settime");
+  println_message("  setdate");
+
+  println_confirmation(" Manipulate PCB"); //subsection of pcb manipulation
+  println_message("  create PCB");
+  println_message("  suspend");
+  println_message("  resume");
+  println_message("  block");
+  println_message("  unblock");
+
+  println_confirmation(" Show PCB"); //subsection of Show PCB
+  println_message("  show all");
+  println_message("  show ready");
+  println_message("  show blocked");
+  println_message("  show");
+
+  println_confirmation(" Current Version"); //subsection of version
+  println_message("  version");
+
+  println_confirmation(" Command Usage Help"); //subsection of help
+  println_message("  help");
+
+  println_confirmation(" Shutdown Program"); //subsection of shutdown
+  println_message("  shutdown");
+  simple_print("\n");
 }
