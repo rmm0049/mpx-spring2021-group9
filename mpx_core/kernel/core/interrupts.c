@@ -11,6 +11,14 @@
 #include <core/serial.h>
 #include <core/tables.h>
 #include <core/interrupts.h>
+#include <core/context.h>
+#include "modules/pcb.h"
+#include "modules/queue.h"
+#include "modules/pcb_func.h"
+#include "modules/temp_func.h"
+#include "modules/perm_pcb_comm.h"
+#include "modules/mpx_supt.h"
+#include <string.h>
 
 // Programmable Interrupt Controllers
 #define PIC1 0x20
@@ -45,6 +53,7 @@ extern void page_fault();
 extern void reserved();
 extern void coprocessor();
 extern void rtc_isr();
+extern void sys_call_isr();
 
 extern idt_entry idt_entries[256];
 
@@ -64,7 +73,7 @@ void do_isr()
       the first 32 irq lines. Most do a panic for now.
 */
 void init_irq(void)
-{  
+{
   int i;
 
   // Necessary interrupt handlers for protected mode
@@ -95,6 +104,10 @@ void init_irq(void)
   }
   // Ignore interrupts from the real time clock
   idt_set_gate(0x08, (u32int)rtc_isr, 0x08, 0x8e);
+
+  //interrupt 60 sys_call_isr
+  idt_set_gate(60, (u32int)sys_call_isr, 0x08, 0x8e);
+
 }
 
 /*
@@ -124,6 +137,52 @@ void init_pic(void)
   outb(PIC1+1,0xFF); //disable irqs for PIC1
   io_wait();
   outb(PIC2+1,0xFF); //disable irqs for PIC2
+}
+
+/**
+  sys_call function definition
+  @param context *registers
+*/
+
+pcb *cop = NULL; //current operating process
+context *oldContext = NULL; //old context from caller
+
+u32int* sys_call(context* registers)
+{
+  if (cop == NULL)
+  {
+    oldContext = registers;
+  }
+  else
+  {
+
+    if (params.op_code == IDLE) //save context (reassign cop's stack top)
+    {
+      cop->topStack = (unsigned char *)registers;
+      cop->state = READY;
+      insertPCB(cop);
+    }
+    else if (params.op_code == EXIT) // free cop
+    {
+      freePCB(cop);
+    }
+  }
+
+  if (readyQueue.size != 0)
+  {
+    pcb *temp = readyQueue.head;
+    cop = temp;
+    removePCB(cop);
+    cop->state = RUNNING;
+
+    println_message("");
+
+    return (u32int *)(cop->topStack);
+  }
+  else
+  {
+    return (u32int *) oldContext;
+  }
 }
 
 void do_divide_error()

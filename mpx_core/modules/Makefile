@@ -23,7 +23,8 @@ pcb_func.o\
 queue.o\
 commands.o\
 temp_func.o\
-perm_pcb_comm.o
+perm_pcb_comm.o\
+loadr3.o
 
 .c.s:
 	$(CC) $(CFLAGS) -S -o $@ $<

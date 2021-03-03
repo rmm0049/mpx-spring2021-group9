@@ -68,13 +68,13 @@ void createPCB(char *params)
 
 void deletePCB(char *name)
 {
-  char *temp1, *temp2, *process;
-  temp1 = strtok(name, " ");
-  temp2 = strtok(NULL, " ");
-  strncmp(temp1, temp2, 0);
-  process = strtok(NULL, " ");
+  // char *temp1, *temp2, *process;
+  // temp1 = strtok(name, " ");
+  // temp2 = strtok(NULL, " ");
+  // strncmp(temp1, temp2, 0);
+  // process = strtok(NULL, " ");
 
-  pcb *delete = findPCB(process);
+  pcb *delete = findPCB(name);
 
   //makes sure name is valid
   if (delete == NULL)
