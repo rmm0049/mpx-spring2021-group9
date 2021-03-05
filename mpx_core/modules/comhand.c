@@ -35,7 +35,6 @@ int comhandler()
   int shutdown_flag = 0;
   int count;
 
-  sys_req(WRITE, COM1, "\n\x1b[32mFor a list of commands, type \x1b[0mcommands\n", &count);
 
   while (!quit)
   {
@@ -92,6 +91,7 @@ int comhandler()
         if (strncmp("Y", cmdBuffer,1) == 0 || strncmp("y", cmdBuffer,1) == 0) // if Y then quit command handler
         {
           quit = 1;
+          deletePCB("idle");
         }
         else // if not shutdown, reset the shutdown flag back to 0
         {
@@ -163,6 +163,10 @@ int comhandler()
     {
       createPCB(cmdBuffer);
     }
+    else if (strncmp("delete PCB idle", cmdBuffer, 15) == 0)
+    {
+      println_error("Can't manipulate system process!");
+    }
     else if (strncmp("delete PCB", cmdBuffer, 10) == 0)
     {
       char *delete = strtok(cmdBuffer, " ");
@@ -170,6 +174,7 @@ int comhandler()
       delete = strtok(NULL, " ");
       deletePCB(delete);
     }
+
     else if (strncmp("block", cmdBuffer, 5) == 0)
     {
       blockPCB(cmdBuffer);
@@ -241,6 +246,8 @@ int comhandler()
       println_error("Command not recognized");
 
     }
+
+    sys_req(IDLE, COM1, NULL, NULL);
 
   }
 

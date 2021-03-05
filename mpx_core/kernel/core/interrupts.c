@@ -149,6 +149,7 @@ context *oldContext = NULL; //old context from caller
 
 u32int* sys_call(context* registers)
 {
+  pcb *temp2 = NULL;
   if (cop == NULL)
   {
     oldContext = registers;
@@ -160,7 +161,8 @@ u32int* sys_call(context* registers)
     {
       cop->topStack = (unsigned char *)registers;
       cop->state = READY;
-      insertPCB(cop);
+      temp2 = cop;
+      //insertPCB(cop);
     }
     else if (params.op_code == EXIT) // free cop
     {
@@ -174,6 +176,8 @@ u32int* sys_call(context* registers)
     cop = temp;
     removePCB(cop);
     cop->state = RUNNING;
+
+    if (temp2 != NULL) insertPCB(temp2);
 
     println_message("");
 

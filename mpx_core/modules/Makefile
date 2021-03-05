@@ -26,7 +26,8 @@ temp_func.o\
 perm_pcb_comm.o\
 loadr3.o\
 chl_array.o\
-chl_func.o
+chl_func.o\
+loadcomhand.o
 
 .c.s:
 	$(CC) $(CFLAGS) -S -o $@ $<

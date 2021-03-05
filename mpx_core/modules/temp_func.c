@@ -68,12 +68,6 @@ void createPCB(char *params)
 
 void deletePCB(char *name)
 {
-  // char *temp1, *temp2, *process;
-  // temp1 = strtok(name, " ");
-  // temp2 = strtok(NULL, " ");
-  // strncmp(temp1, temp2, 0);
-  // process = strtok(NULL, " ");
-
   pcb *delete = findPCB(name);
 
   //makes sure name is valid
@@ -81,6 +75,15 @@ void deletePCB(char *name)
   {
     println_error("PCB doesn't exist!");
     return;
+  }
+
+  if (strncmp(delete->name, "infinite", 8) == 0)
+  {
+    if (delete->suspended == NOT_SUSP)
+    {
+      println_error("Infinite must be suspended to delete!");
+      return;
+    }
   }
 
   removePCB(delete);

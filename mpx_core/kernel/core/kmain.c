@@ -24,6 +24,7 @@
 #include "modules/queue.h"
 #include "modules/mpx_supt.h"
 #include "modules/comhand.h"
+#include "modules/loadcomhand.h"
 
 void kmain(void)
 {
@@ -93,7 +94,13 @@ void kmain(void)
    println_message("Welcome to MPX, enter commands at the command prompt.");
    println_message("Sample commands: help, shutdown, version, gettime, getdate...");
    println_message("\n");
-   comhandler();
+   sys_req(WRITE, COM1, "\n\x1b[32mFor a list of commands, type \x1b[0mcommands\n", NULL);
+
+   loadComhand();
+   loadIdle();
+   loadInfinite();
+   asm volatile("int $60");
+   //comhandler();
 
    // 7) System Shutdown on return from your command handler
    klogv("Starting system shutdown procedure...");
