@@ -11,6 +11,8 @@
 #include <core/io.h>
 #include <core/serial.h>
 #include "modules/mpx_supt.h"
+#include "modules/chl_array.h"
+#include "modules/chl_func.h"
 #define NO_ERROR 0
 
 /// Active devices used for serial output
@@ -123,6 +125,7 @@ int *polling(char *buffer, int *count){
         if (i != 0)
         {
           *(buffer+i) = '\0';  //append a null character to output after return
+          addCHL(buffer);      //add buffer to command history
         }
         else *(buffer) = '\r';
 
@@ -212,9 +215,59 @@ int *polling(char *buffer, int *count){
             }
           }
 
-          if (ch3 == 65); // Down arrow don't do anything
+          if (ch3 == 65){ // up arrow
+            if(history.currenti>0){
+              //clear current line, buffer and reset cursor
+              //{}
 
-          else if (ch3 == 66); //Up arrow don't do anything
+              for(j=cursor; j>=1; j--){
+                serial_print("\x1B[1D"); //sets the cursor to the beginning of the line
+                *(buffer+j-1)='\0'; //clears buffer
+              }
+
+              serial_print("\x1B[K"); //clears the line
+              cursor = 0; i =0;// resets cursor variable
+
+
+              history.currenti--;
+              //history.lines[history.currenti]
+              //print current line, store new buffer, set cursor
+              serial_print(history.lines[history.currenti]);
+              int leng;
+              for(leng = 0; leng<strlen(history.lines[history.currenti]);leng++){
+                *(buffer+leng)=history.lines[history.currenti][leng];
+                cursor++;
+                i++;
+              }
+
+            }
+          }
+
+          else if (ch3 == 66){ //down arrow
+            if(history.currenti<history.nexti){
+              //clear current line, buffer and reset cursor
+              //{}
+              for(j=cursor; j>=1; j--){
+                serial_print("\x1B[1D"); //sets the cursor to the beginning of the line
+                *(buffer+j-1)='\0'; //clears buffer
+              }
+
+              serial_print("\x1B[K"); //clears the line
+              cursor = 0; i =0;// resets cursor variable
+
+              history.currenti++;
+              if(history.currenti<history.nexti){
+                //print current line, store new buffer, set cursor
+                serial_print(history.lines[history.currenti]);
+                int leng;
+                for(leng = 0; leng<strlen(history.lines[history.currenti]);leng++){
+                  *(buffer+leng)=history.lines[history.currenti][leng];
+                  cursor++;
+                  i++;
+                }
+              }
+            }
+          }
 
           else if (ch3 == 68) //left arrow
           {
