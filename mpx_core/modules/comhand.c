@@ -16,6 +16,7 @@
 #include "temp_func.h"
 #include "queue.h"
 #include "perm_pcb_comm.h"
+#include "loadr3.h"
 #include <core/serial.h>
 #include <string.h>
 
@@ -164,7 +165,10 @@ int comhandler()
     }
     else if (strncmp("delete PCB", cmdBuffer, 10) == 0)
     {
-      deletePCB(cmdBuffer);
+      char *delete = strtok(cmdBuffer, " ");
+      delete = strtok(NULL, " ");
+      delete = strtok(NULL, " ");
+      deletePCB(delete);
     }
     else if (strncmp("block", cmdBuffer, 5) == 0)
     {
@@ -194,11 +198,15 @@ int comhandler()
     }
     else if (strncmp("suspend", cmdBuffer, 7) == 0)
     {
-      suspendPCB(cmdBuffer);
+      char *suspend = strtok(cmdBuffer, " ");
+      suspend = strtok(NULL, " ");
+      suspendPCB(suspend);
     }
     else if (strncmp("resume", cmdBuffer, 6) == 0)
     {
-      resumePCB(cmdBuffer);
+      char *resume = strtok(cmdBuffer, " ");
+      resume = strtok(NULL, " ");
+      resumePCB(resume);
     }
     else if (strncmp("set priority", cmdBuffer,12) == 0)
     {
@@ -212,6 +220,16 @@ int comhandler()
       num_int = atoi(number);
 
       setPCBPriority(proc_name, num_int);
+    }
+
+    else if (strncmp("yield", cmdBuffer, 5) == 0)
+    {
+      asm volatile("int $60");
+    }
+
+    else if (strncmp("loadr3", cmdBuffer, 6) == 0)
+    {
+      loadproc();
     }
 
     //user just presses enter, doesn't enter anything

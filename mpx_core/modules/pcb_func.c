@@ -8,6 +8,7 @@
 #include "mpx_supt.h"
 #include <string.h>
 #include <core/serial.h>
+#include <core/context.h>
 
 pcb *removed; //global pcb pointer for some odd reason ???
 pcb *temp; //no idea yo
@@ -35,9 +36,8 @@ pcb* setupPCB(char *name, int class, int priority)
 
   memset(pcb->stack, 0, 1024);
 
-  pcb->topStack = (pcb->stack+STACK_SIZE);
   pcb->baseStack = pcb->stack;
-
+  pcb->topStack = pcb->baseStack + 1024 - sizeof(struct context);
 
   return pcb;
 }

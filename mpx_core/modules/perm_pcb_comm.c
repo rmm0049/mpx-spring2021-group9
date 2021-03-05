@@ -15,9 +15,9 @@ int flag = 0;
 
 void suspendPCB(char *name)
 {
-  char *process = strtok(name, " ");
-  process = strtok(NULL, " ");
-  pcb *pcb = findPCB(process);
+  // char *process = strtok(name, " ");
+  // process = strtok(NULL, " ");
+  pcb *pcb = findPCB(name);
 
   if (pcb == NULL)
   {
@@ -40,9 +40,9 @@ void suspendPCB(char *name)
 
 void resumePCB(char *name)
 {
-  char *process = strtok(name, " ");
-  process = strtok(NULL, " ");
-  pcb *pcb = findPCB(process);
+  // char *process = strtok(name, " ");
+  // process = strtok(NULL, " ");
+  pcb *pcb = findPCB(name);
 
   if (pcb == NULL)
   {
