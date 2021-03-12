@@ -15,8 +15,11 @@
 #include "commands.h"
 #include "temp_func.h"
 #include "queue.h"
+#include "pcb_func.h"
 #include "perm_pcb_comm.h"
 #include "loadr3.h"
+#include "alarm.h"
+#include "alarmList.h"
 #include <core/serial.h>
 #include <string.h>
 
@@ -90,8 +93,17 @@ int comhandler()
       {
         if (strncmp("Y", cmdBuffer,1) == 0 || strncmp("y", cmdBuffer,1) == 0) // if Y then quit command handler
         {
-          quit = 1;
-          deletePCB("idle");
+          if (findPCB("infinite") != NULL)
+          {
+            println_error("infinite process still running!");
+
+          }
+          else
+          {
+            quit = 1;
+            deletePCB("idle");
+            if (findPCB("alarm") != NULL) deletePCB("alarm");
+          }
         }
         else // if not shutdown, reset the shutdown flag back to 0
         {
@@ -159,10 +171,6 @@ int comhandler()
     }
 
     //temprorary PCB commands
-    else if (strncmp("create PCB", cmdBuffer, 10) == 0)
-    {
-      createPCB(cmdBuffer);
-    }
     else if (strncmp("delete PCB idle", cmdBuffer, 15) == 0)
     {
       println_error("Can't manipulate system process!");
@@ -175,14 +183,14 @@ int comhandler()
       deletePCB(delete);
     }
 
-    else if (strncmp("block", cmdBuffer, 5) == 0)
-    {
-      blockPCB(cmdBuffer);
-    }
-    else if (strncmp("unblock", cmdBuffer, 7) == 0)
-    {
-        unblockPCB(cmdBuffer);
-    }
+    // else if (strncmp("block", cmdBuffer, 5) == 0)
+    // {
+    //   blockPCB(cmdBuffer);
+    // }
+    // else if (strncmp("unblock", cmdBuffer, 7) == 0)
+    // {
+    //     unblockPCB(cmdBuffer);
+    // }
 
     //permanent PCB commands
     else if (strncmp("show ready", cmdBuffer, 10) == 0)
@@ -227,14 +235,22 @@ int comhandler()
       setPCBPriority(proc_name, num_int);
     }
 
-    else if (strncmp("yield", cmdBuffer, 5) == 0)
-    {
-      asm volatile("int $60");
-    }
-
     else if (strncmp("loadr3", cmdBuffer, 6) == 0)
     {
       loadproc();
+    }
+
+    else if (strncmp("alarm", cmdBuffer, 5) == 0)
+    {
+      if (findPCB("alarm") == NULL)
+      {
+        updateAlarm(cmdBuffer);
+        loadAlarm();
+      }
+      else
+      {
+        updateAlarm(cmdBuffer);
+      }
     }
 
     //user just presses enter, doesn't enter anything
@@ -246,6 +262,7 @@ int comhandler()
       println_error("Command not recognized");
 
     }
+
 
     sys_req(IDLE, COM1, NULL, NULL);
 

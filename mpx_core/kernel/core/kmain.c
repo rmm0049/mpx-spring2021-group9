@@ -50,7 +50,7 @@ void kmain(void)
    // you will need to call mpx_init from the mpx_supt.c
 
 
-   mpx_init(MODULE_R2); //Module 2
+   mpx_init(MODULE_R4); //Module 2
 
    // 2) Check that the boot was successful and correct when using grub
    // Comment this when booting the kernel directly using QEMU, etc.
@@ -100,7 +100,6 @@ void kmain(void)
    loadIdle();
    loadInfinite();
    asm volatile("int $60");
-   //comhandler();
 
    // 7) System Shutdown on return from your command handler
    klogv("Starting system shutdown procedure...");

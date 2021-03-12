@@ -162,7 +162,6 @@ u32int* sys_call(context* registers)
       cop->topStack = (unsigned char *)registers;
       cop->state = READY;
       temp2 = cop;
-      //insertPCB(cop);
     }
     else if (params.op_code == EXIT) // free cop
     {

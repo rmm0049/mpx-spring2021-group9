@@ -147,6 +147,15 @@ void help(char *msg)
     "unblock [name]",
     "Sets the PCB with the given name to unblocked and reinserts into appropriate queue.");
   }
+
+  //help page for alarm
+  else if (strncmp("help alarm", msg, 10) == 0)
+  {
+    display_help(count, "alarm",
+    "alarm \"[message]\" hh:mm:ss",
+    "Sets an alarm on the system that will display the message at or after the specified time");
+  }
+
   //using help without a command, displays the correct usage of help
   else
   {

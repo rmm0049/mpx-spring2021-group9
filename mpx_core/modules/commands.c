@@ -42,10 +42,13 @@ void commands()
   sys_req(WRITE, COM1, "      show all\n", &count);
   sys_req(WRITE, COM1, "      show ready\n", &count);
   sys_req(WRITE, COM1, "      show blocked\n", &count);
-  sys_req(WRITE, COM1, "      create PCB\n", &count);// temprorary PCB
+  // sys_req(WRITE, COM1, "      create PCB\n", &count);// temprorary PCB
   sys_req(WRITE, COM1, "      delete PCB\n", &count);
-  sys_req(WRITE, COM1, "      block\n", &count);
-  sys_req(WRITE, COM1, "      unblock\n", &count);
+  // sys_req(WRITE, COM1, "      block\n", &count);
+  // sys_req(WRITE, COM1, "      unblock\n", &count);
+
+  sys_req(WRITE, COM1, "   \x1b[32mAlarm:\n", &count);
+  sys_req(WRITE, COM1, "      \x1b[36malarm", &count);
 
 
   sys_req(WRITE, COM1, "\x1b[0m", &count); //change color back to default
