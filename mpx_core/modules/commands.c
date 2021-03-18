@@ -48,7 +48,11 @@ void commands()
   // sys_req(WRITE, COM1, "      unblock\n", &count);
 
   sys_req(WRITE, COM1, "   \x1b[32mAlarm:\n", &count);
-  sys_req(WRITE, COM1, "      \x1b[36malarm", &count);
+  sys_req(WRITE, COM1, "      \x1b[36malarm\n", &count);
+
+  sys_req(WRITE, COM1, "   \x1b[32mProcess Commands:\n", &count);
+  sys_req(WRITE, COM1, "      \x1b[36minfinite\n", &count);
+
 
 
   sys_req(WRITE, COM1, "\x1b[0m", &count); //change color back to default

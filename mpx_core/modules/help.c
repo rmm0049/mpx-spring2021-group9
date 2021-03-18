@@ -120,12 +120,12 @@ void help(char *msg)
   }
   //temporary PCB commands
   //help page for createPCB
-  else if (strncmp("help create PCB", msg, 15) == 0)
-  {
-    display_help(count, "create PCB",
-    "create PCB [class] [name] [priority]",
-    "Creates a new Process Control Block and inserts into appropriate queue.");
-  }
+  // else if (strncmp("help create PCB", msg, 15) == 0)
+  // {
+  //   display_help(count, "create PCB",
+  //   "create PCB [class] [name] [priority]",
+  //   "Creates a new Process Control Block and inserts into appropriate queue.");
+  // }
   //help page for delete PCB
   else if (strncmp("help delete PCB", msg, 15) == 0)
   {
@@ -134,19 +134,19 @@ void help(char *msg)
     "Removes the PCB with the given name from its queue and frees all associated memory.");
   }
   //help page for block
-  else if (strncmp("help block", msg, 10) == 0)
-  {
-    display_help(count, "block",
-    "block [name]",
-    "Sets the PCB with the given name to blocked and reinserts into appropriate queue.");
-  }
-  //help page for unblock
-  else if (strncmp("help unblock", msg, 12) == 0)
-  {
-    display_help(count, "unblock",
-    "unblock [name]",
-    "Sets the PCB with the given name to unblocked and reinserts into appropriate queue.");
-  }
+  // else if (strncmp("help block", msg, 10) == 0)
+  // {
+  //   display_help(count, "block",
+  //   "block [name]",
+  //   "Sets the PCB with the given name to blocked and reinserts into appropriate queue.");
+  // }
+  // //help page for unblock
+  // else if (strncmp("help unblock", msg, 12) == 0)
+  // {
+  //   display_help(count, "unblock",
+  //   "unblock [name]",
+  //   "Sets the PCB with the given name to unblocked and reinserts into appropriate queue.");
+  // }
 
   //help page for alarm
   else if (strncmp("help alarm", msg, 10) == 0)
@@ -154,6 +154,14 @@ void help(char *msg)
     display_help(count, "alarm",
     "alarm \"[message]\" hh:mm:ss",
     "Sets an alarm on the system that will display the message at or after the specified time");
+  }
+
+  //help page for infinite
+  else if (strncmp("help infinite", msg, 13) == 0)
+  {
+    display_help(count, "infinite",
+    "infinite",
+    "Loads the infinite process into the ready queue and runs until it is suspended and deleted.");
   }
 
   //using help without a command, displays the correct usage of help

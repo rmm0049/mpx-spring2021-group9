@@ -20,6 +20,7 @@
 #include "loadr3.h"
 #include "alarm.h"
 #include "alarmList.h"
+#include "loadcomhand.h"
 #include <core/serial.h>
 #include <string.h>
 
@@ -251,6 +252,11 @@ int comhandler()
       {
         updateAlarm(cmdBuffer);
       }
+    }
+    else if (strncmp("infinite", cmdBuffer, 8) == 0)
+    {
+      if (findPCB("infinite") == NULL)
+        loadInfinite();
     }
 
     //user just presses enter, doesn't enter anything
