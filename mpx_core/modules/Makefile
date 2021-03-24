@@ -29,7 +29,9 @@ chl_array.o\
 chl_func.o\
 loadcomhand.o\
 alarm.o\
-alarmList.o
+alarmList.o\
+memComm.o\
+memControl.o
 
 .c.s:
 	$(CC) $(CFLAGS) -S -o $@ $<

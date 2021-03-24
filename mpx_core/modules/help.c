@@ -164,6 +164,14 @@ void help(char *msg)
     "Loads the infinite process into the ready queue and runs until it is suspended and deleted.");
   }
 
+  //help page for loadr3
+  else if (strncmp("help loadr3", msg, 13) == 0)
+  {
+    display_help(count, "loadr3",
+    "loadr3",
+    "Loads the 5 processes from R3 into the ready, suspended queue.");
+  }
+
   //using help without a command, displays the correct usage of help
   else
   {

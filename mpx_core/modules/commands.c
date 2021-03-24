@@ -52,6 +52,8 @@ void commands()
 
   sys_req(WRITE, COM1, "   \x1b[32mProcess Commands:\n", &count);
   sys_req(WRITE, COM1, "      \x1b[36minfinite\n", &count);
+  sys_req(WRITE, COM1, "      \x1b[36mloadr3\n", &count);
+
 
 
 

@@ -25,6 +25,8 @@
 #include "modules/mpx_supt.h"
 #include "modules/comhand.h"
 #include "modules/loadcomhand.h"
+#include "modules/cmcb.h"
+#include "modules/lmcb.h"
 
 void kmain(void)
 {
@@ -32,7 +34,6 @@ void kmain(void)
    // Uncomment if you want to access the multiboot header
    // extern void *mbd;
    // char *boot_loader_name = (char*)((long*)mbd)[16];
-
 
    //Initialize Serial I/O
    // functions to initialize serial I/O can be found in serial.c
@@ -49,13 +50,13 @@ void kmain(void)
    //     MPX Module.  This will change with each module.
    // you will need to call mpx_init from the mpx_supt.c
 
-
    mpx_init(MODULE_R4); //Module 4
 
    // 2) Check that the boot was successful and correct when using grub
    // Comment this when booting the kernel directly using QEMU, etc.
-   if ( magic != 0x2BADB002 ){
-     //kpanic("Boot was not error free. Halting.");
+   if (magic != 0x2BADB002)
+   {
+      //kpanic("Boot was not error free. Halting.");
    }
 
    // 3) Descriptor Tables -- tables.c
@@ -70,11 +71,11 @@ void kmain(void)
    //enables interrupts
    sti();
 
-    // 4)  Interrupt vector table --  tables.c
-    // this creates and initializes a default interrupt vector table
-    // this function is in tables.c
+   // 4)  Interrupt vector table --  tables.c
+   // this creates and initializes a default interrupt vector table
+   // this function is in tables.c
 
-    klogv("Interrupt vector table initialized!");
+   klogv("Interrupt vector table initialized!");
 
    // 5) Virtual Memory -- paging.c  -- init_paging
    //  this function creates the kernel's heap
@@ -86,7 +87,11 @@ void kmain(void)
    klogv("Initializing virtual memory...");
    init_paging();
 
-   //Initialize queues?
+   //Initialize Heap
+
+   //will call initializeHeap() function in final production
+
+   //Initialize free and allocated lists
 
    // 6) Call YOUR command handler -  interface method
    klogv("Transferring control to commhand...");
