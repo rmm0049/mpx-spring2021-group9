@@ -192,19 +192,22 @@ int comhandler()
     {
       isEmptyComm();
     }
-    else if (strncmp("allocate", cmdBuffer, 8) == 0)
-    {
-      char *temp = strtok(cmdBuffer, " ");
-      temp = strtok(NULL, " ");
-      allocateMem(atoi(temp));
-    }
-    else if (strncmp("free", cmdBuffer, 4) == 0)
-    {
-      char *temp = strtok(cmdBuffer, " ");
-      temp = strtok(NULL, " ");
-      println_message(temp);
-      freeMem(temp);
-    }
+    // else if (strncmp("allocate", cmdBuffer, 8) == 0)
+    // {
+    //   if (!getMemModule())
+    //     break;
+    //   char *temp = strtok(cmdBuffer, " ");
+    //   temp = strtok(NULL, " ");
+    //   allocateMem(atoi(temp));
+    // }
+    // else if (strncmp("free", cmdBuffer, 4) == 0)
+    // {
+    //   if (!getMemModule())
+    //     break;
+    //   char *temp = strtok(cmdBuffer, " ");
+    //   temp = strtok(NULL, " ");
+    //   freeMem(temp);
+    // }
 
     else if (strncmp("show free", cmdBuffer, 9) == 0)
     {

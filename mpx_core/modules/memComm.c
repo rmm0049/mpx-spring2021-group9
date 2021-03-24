@@ -31,6 +31,8 @@ void isEmptyComm()
     int value = isEmpty();
     if (value)
         println_error("Heap is empty!");
+    else
+        println_warning("Heap is NOT empty");
 }
 
 void showFree()
@@ -63,7 +65,7 @@ void printMCBInfo(cmcb *block)
     char addr[50];
     char size[11];
 
-    itoa((int)block->begAddr, addr, 10);
+    itoa((int)(block->begAddr - OFFSET), addr, 10);
     itoa(block->memSize, size, 10);
 
     if (block->type == 1)
@@ -72,6 +74,8 @@ void printMCBInfo(cmcb *block)
         strcpy(typeString, "allocated");
 
     println_message("----------------------------");
+    // simple_print("MCB name: ");
+    // println_confirmation(block->name);
     simple_print("MCB Type: ");
     println_confirmation(typeString);
     simple_print("Beginning address: ");

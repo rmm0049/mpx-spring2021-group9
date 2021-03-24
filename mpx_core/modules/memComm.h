@@ -6,6 +6,8 @@
 #ifndef _MEM_COMM_H
 #define _MEM_COMM_H
 
+#define OFFSET 218103852
+
 #include "cmcb.h"
 /**
  * Initializes heap with given size

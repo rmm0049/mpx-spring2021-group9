@@ -25,7 +25,7 @@ cmcb *placeCMCB(int size, void *pos, int type, cmcb *prev, cmcb *next)
 {
     cmcb *new = (cmcb *)pos;
     new->type = type;
-    new->begAddr = (u32int)pos + sizeof(cmcb);
+    new->begAddr = pos + sizeof(cmcb);
     new->size = size;
     new->memSize = size - sizeof(cmcb) - sizeof(lmcb);
     new->next = next;
@@ -94,7 +94,7 @@ int initializeHeap(int size)
         //first CMCB
         cmcb *firstCMCB = (cmcb *)memoryHeap;
         firstCMCB->type = FREE; // free
-        firstCMCB->begAddr = (u32int)memoryHeap + sizeof(cmcb);
+        firstCMCB->begAddr = memoryHeap + sizeof(cmcb);
         firstCMCB->size = size + sizeof(cmcb) + sizeof(lmcb);
         firstCMCB->memSize = size - sizeof(cmcb) - sizeof(lmcb);
         firstCMCB->next = NULL;
@@ -160,6 +160,7 @@ void *allocateMemory(u32int size)
     int prevSize = freeMemList->size;
 
     cmcb *newAlloc = placeCMCB(actualSize, addr, ALLOCATED, NULL, NULL);
+
     strcpy(newAlloc->name, getCOP());
 
     memoryAllocated += actualSize;
@@ -178,7 +179,6 @@ void *allocateMemory(u32int size)
     }
     if (newFree->prev == NULL)
     {
-        println_message("I'm here");
         freeHead = newFree;
     }
 
@@ -226,9 +226,10 @@ int freeMemory(void *memoryPtr)
     {
         if (node == NULL)
         {
+            println_error("Couldn't find memory pointer");
             return 0;
         }
-        if ((int)node->begAddr == atoi(memoryPtr))
+        if (node->begAddr == memoryPtr)
         {
             isFound = 1;
         }

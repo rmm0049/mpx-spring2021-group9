@@ -12,15 +12,15 @@
 #define WRITE 3
 #define INVALID_OPERATION 4
 
-#define TRUE  1
-#define FALSE  0
+#define TRUE 1
+#define FALSE 0
 
 #define MODULE_R1 0
 #define MODULE_R2 1
 #define MODULE_R3 2
 #define MODULE_R4 4
 #define MODULE_R5 8
-#define MODULE_F  9
+#define MODULE_F 9
 #define IO_MODULE 10
 #define MEM_MODULE 11
 
@@ -31,7 +31,8 @@
 #define DEFAULT_DEVICE 111
 #define COM_PORT 222
 
-typedef struct {
+typedef struct
+{
   int op_code;
   int device_id;
   char *buffer_ptr;
@@ -45,8 +46,8 @@ extern param params;
   Description..: Generate interrupt 60H
   Params..: int op_code one of (IDLE, EXIT, READ, WRITE)
 */
-int sys_req( int op_code, int device_id, char *buffer_ptr,
-			int *count_ptr );
+int sys_req(int op_code, int device_id, char *buffer_ptr,
+            int *count_ptr);
 
 /*
   Procedure..: mpx_init
@@ -69,8 +70,6 @@ void sys_set_malloc(u32int (*func)(u32int));
 */
 void sys_set_free(int (*func)(void *));
 
-
-
 /*
   Procedure..: sys_alloc_mem
   Description..: Allocates a block of memory (similar to malloc)
@@ -91,5 +90,7 @@ int sys_free_mem(void *ptr);
   Params..: None
 */
 void idle();
+
+int getMemModule();
 
 #endif

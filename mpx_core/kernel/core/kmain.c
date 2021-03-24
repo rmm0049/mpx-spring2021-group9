@@ -27,6 +27,8 @@
 #include "modules/loadcomhand.h"
 #include "modules/cmcb.h"
 #include "modules/lmcb.h"
+#include "modules/memControl.h"
+#include "modules/startup.h"
 
 void kmain(void)
 {
@@ -43,14 +45,14 @@ void kmain(void)
    set_serial_out(COM1);
    set_serial_in(COM1);
 
-   klogv("Starting MPX boot sequence...");
-   klogv("Initialized serial I/O on COM1 device...");
+   // klogv("Starting MPX boot sequence...");
+   // klogv("Initialized serial I/O on COM1 device...");
 
    // 1) Initialize the support software by identifying the current
    //     MPX Module.  This will change with each module.
    // you will need to call mpx_init from the mpx_supt.c
 
-   mpx_init(MODULE_R4); //Module 4
+   mpx_init(MEM_MODULE); //Module 5
 
    // 2) Check that the boot was successful and correct when using grub
    // Comment this when booting the kernel directly using QEMU, etc.
@@ -62,7 +64,7 @@ void kmain(void)
    // 3) Descriptor Tables -- tables.c
    //  you will need to initialize the global
    // this keeps track of allocated segments and pages
-   klogv("Initializing descriptor tables...");
+   // klogv("Initializing descriptor tables...");
    init_gdt();
    init_idt();
 
@@ -75,7 +77,7 @@ void kmain(void)
    // this creates and initializes a default interrupt vector table
    // this function is in tables.c
 
-   klogv("Interrupt vector table initialized!");
+   // klogv("Interrupt vector table initialized!");
 
    // 5) Virtual Memory -- paging.c  -- init_paging
    //  this function creates the kernel's heap
@@ -84,14 +86,17 @@ void kmain(void)
    // this allocates memory using discrete "pages" of physical memory
    // NOTE:  You will only have about 70000 bytes of dynamic memory
    //
-   klogv("Initializing virtual memory...");
+   // klogv("Initializing virtual memory...");
    init_paging();
 
-   //Initialize Heap
-
    //will call initializeHeap() function in final production
+   //Initialize Heap
+   initializeHeap(50000);
+   sys_set_free(freeMemory);
+   sys_set_malloc((void *)allocateMemory);
 
-   //Initialize free and allocated lists
+   //prints startup screen
+   printStartup();
 
    // 6) Call YOUR command handler -  interface method
    klogv("Transferring control to commhand...");

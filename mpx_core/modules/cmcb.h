@@ -20,7 +20,7 @@ typedef struct cmcb
     int size;          //indicating size of block in bytes
     int memSize;       //size of actual block
     char name[20];     //name of PCB housed in block
-    u32int begAddr;    //Beginning address of block
+    void *begAddr;     //Beginning address of block
     struct cmcb *next; //pointer to next of same type
     struct cmcb *prev; //pointer to prev of same type
 } cmcb;
