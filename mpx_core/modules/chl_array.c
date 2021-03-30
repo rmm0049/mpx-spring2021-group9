@@ -1,6 +1,6 @@
 /**
-  @file chl_queue.c
-  Defines global Command History Line queue
+  @file chl_array.c
+  Defines global Command History Line array
 */
 
 #include "chl_array.h"

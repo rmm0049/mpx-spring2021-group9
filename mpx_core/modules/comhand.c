@@ -13,6 +13,7 @@
 #include "settime.h"
 #include "setdate.h"
 #include "commands.h"
+#include "alias_func.h"
 #include "temp_func.h"
 #include "queue.h"
 #include "pcb_func.h"
@@ -44,6 +45,11 @@ int comhandler()
     memset(cmdBuffer, '\0', 100);
     bufferSize = 99;
     sys_req(READ, COM1, cmdBuffer, &bufferSize);
+
+    //check if an alias was entered, then changes cmdBuffer to aliastext
+    if (!isAliasListEmpty()){
+      identifyAlias(cmdBuffer);
+    }
 
     /*
       Commands for R1
@@ -173,6 +179,14 @@ int comhandler()
     else if (strncmp("setdate", cmdBuffer, 7) == 0)
     {
       setdate(cmdBuffer);
+    }
+
+    //alias command
+    else if (strncmp("alias", cmdBuffer, 5) == 0){
+      char *alias = strtok(cmdBuffer, " ");
+      alias = strtok(NULL, " ");
+      char *aliastext = strtok(NULL, "");
+      addAlias(alias,aliastext);
     }
 
     //temprorary PCB commands
