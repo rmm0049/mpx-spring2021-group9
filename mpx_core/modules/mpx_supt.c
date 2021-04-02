@@ -32,8 +32,6 @@ u32int (*student_malloc)(u32int);
 // is a pointer to the student's "free" operation.
 int (*student_free)(void *);
 
-
-
 /**
 *	This function is use to issue system requests
 *	for service.
@@ -41,54 +39,62 @@ int (*student_free)(void *);
 *	@param int op_code, int device_id, char *buffer_ptr, int *count_ptr
 */
 
-int sys_req( 	int  op_code,
-			int device_id,
-			char *buffer_ptr,
-			int *count_ptr )
+int sys_req(int op_code,
+            int device_id,
+            char *buffer_ptr,
+            int *count_ptr)
 
 {
-	int return_code =0;
+  int return_code = 0;
 
-  if (op_code == IDLE || op_code == EXIT){
+  if (op_code == IDLE || op_code == EXIT)
+  {
     // store the process's operation request
     // triger interrupt 60h to invoke
     params.op_code = op_code;
-  	asm volatile ("int $60");
-  }// idle or exit
+    asm volatile("int $60");
+  } // idle or exit
 
-  else if (op_code == READ || op_code == WRITE) {
+  else if (op_code == READ || op_code == WRITE)
+  {
     // validate buffer pointer and count pointer
     if (buffer_ptr == NULL)
       return_code = INVALID_BUFFER;
     // else if (count_ptr == NULL || *count_ptr <= 0){          //Don't know why this is messing
     //   return_code = INVALID_COUNT;														//up the sys_req WRITE call becasue
-			// serial_println("I am here");														//it thinks the count_ptr is NULL when it's not???
-		// }
+    // serial_println("I am here");														//it thinks the count_ptr is NULL when it's not???
+    // }
 
     // if parameters are valid store in the params structure
-    if ( return_code == 0){
+    if (return_code == 0)
+    {
       params.op_code = op_code;
       params.device_id = device_id;
       params.buffer_ptr = buffer_ptr;
       params.count_ptr = count_ptr;
 
-      if (!io_module_active){
+      if (!io_module_active)
+      {
         // if default device
         if (op_code == READ)
           return_code = *(polling(buffer_ptr, count_ptr));
 
-        else{//must be WRITE
+        else
+        { //must be WRITE
           return_code = serial_print(buffer_ptr);
-				}
-
-      } else {// I/O module is implemented
-        asm volatile ("int $60");
+        }
+      }
+      else
+      { // I/O module is implemented
+        asm volatile("int $60");
       } // NOT IO_MODULE
     }
-  } else return_code = INVALID_OPERATION;
+  }
+  else
+    return_code = INVALID_OPERATION;
 
   return return_code;
-}// end of sys_req
+} // end of sys_req
 
 /**
   	Initialize MPX support software, based
@@ -104,13 +110,11 @@ void mpx_init(int cur_mod)
 
   current_module = cur_mod;
   if (cur_mod == MEM_MODULE)
-		mem_module_active = TRUE;
+    mem_module_active = TRUE;
 
   if (cur_mod == IO_MODULE)
-		io_module_active = TRUE;
+    io_module_active = TRUE;
 }
-
-
 
 /**
   Sets the memory allocation function for sys_alloc_mem
@@ -137,11 +141,10 @@ void sys_set_free(int (*func)(void *))
 void *sys_alloc_mem(u32int size)
 {
   if (!mem_module_active)
-    return (void *) kmalloc(size);
+    return (void *)kmalloc(size);
   else
-    return (void *) (*student_malloc)(size);
+    return (void *)(*student_malloc)(size);
 }
-
 
 /**
   Frees memory
@@ -163,14 +166,20 @@ int sys_free_mem(void *ptr)
 void idle()
 {
   char msg[30];
-  int count=0;
+  int count = 0;
 
-	memset( msg, '\0', sizeof(msg));
-	strcpy(msg, "IDLE PROCESS EXECUTING.\n");
-	count = strlen(msg);
+  memset(msg, '\0', sizeof(msg));
+  strcpy(msg, "IDLE PROCESS EXECUTING.\n");
+  count = strlen(msg);
 
-  while(1){
-	sys_req( WRITE, DEFAULT_DEVICE, msg, &count);
+  while (1)
+  {
+    sys_req(WRITE, DEFAULT_DEVICE, msg, &count);
     sys_req(IDLE, DEFAULT_DEVICE, NULL, NULL);
   }
+}
+
+int getMemModule()
+{
+  return mem_module_active;
 }

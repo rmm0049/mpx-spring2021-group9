@@ -32,6 +32,12 @@ void suspendPCB(char *name)
     return;
   }
 
+  if (!pcb->class)
+  {
+    println_error("Can't manipulate system process!");
+    return;
+  }
+
   removePCB(pcb);
   pcb->suspended = SUSPSEND;
   insertPCB(pcb);
@@ -50,12 +56,19 @@ void resumePCB(char *name)
     return;
   }
 
+  if (!pcb->class)
+  {
+    println_error("Can't manipulate system process!");
+    return;
+  }
+
   //checks to make sure pcb is not already not suspended
   if (pcb->suspended == NOT_SUSP)
   {
     println_error("PCB is already not suspended!");
     return;
   }
+
 
   removePCB(pcb);
   pcb->suspended = NOT_SUSP;

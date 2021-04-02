@@ -33,7 +33,7 @@
   Description..: The i386 can do an io wait by accessing another port.
       Mainly used in initializing the PIC.
 */
-#define io_wait() asm volatile ("outb $0x80")
+#define io_wait() asm volatile("outb $0x80")
 
 extern void divide_error();
 extern void debug();
@@ -64,7 +64,7 @@ void do_isr()
   char in = inb(COM2);
   serial_print(&in);
   serial_println("here");
-  outb(0x20,0x20); //EOI
+  outb(0x20, 0x20); //EOI
 }
 
 /*
@@ -78,36 +78,37 @@ void init_irq(void)
 
   // Necessary interrupt handlers for protected mode
   u32int isrs[17] = {
-    (u32int)divide_error,
-    (u32int)debug,
-    (u32int)nmi,
-    (u32int)breakpoint,
-    (u32int)overflow,
-    (u32int)bounds,
-    (u32int)invalid_op,
-    (u32int)device_not_available,
-    (u32int)double_fault,
-    (u32int)coprocessor_segment,
-    (u32int)invalid_tss,
-    (u32int)segment_not_present,
-    (u32int)stack_segment,
-    (u32int)general_protection,
-    (u32int)page_fault,
-    (u32int)reserved,
-    (u32int)coprocessor
-  };
+      (u32int)divide_error,
+      (u32int)debug,
+      (u32int)nmi,
+      (u32int)breakpoint,
+      (u32int)overflow,
+      (u32int)bounds,
+      (u32int)invalid_op,
+      (u32int)device_not_available,
+      (u32int)double_fault,
+      (u32int)coprocessor_segment,
+      (u32int)invalid_tss,
+      (u32int)segment_not_present,
+      (u32int)stack_segment,
+      (u32int)general_protection,
+      (u32int)page_fault,
+      (u32int)reserved,
+      (u32int)coprocessor};
 
   // Install handlers; 0x08=sel, 0x8e=flags
-  for(i=0; i<32; i++){
-    if (i<17) idt_set_gate(i, isrs[i], 0x08, 0x8e);
-    else idt_set_gate(i, (u32int)reserved, 0x08, 0x8e);
+  for (i = 0; i < 32; i++)
+  {
+    if (i < 17)
+      idt_set_gate(i, isrs[i], 0x08, 0x8e);
+    else
+      idt_set_gate(i, (u32int)reserved, 0x08, 0x8e);
   }
   // Ignore interrupts from the real time clock
   idt_set_gate(0x08, (u32int)rtc_isr, 0x08, 0x8e);
 
   //interrupt 60 sys_call_isr
   idt_set_gate(60, (u32int)sys_call_isr, 0x08, 0x8e);
-
 }
 
 /*
@@ -118,25 +119,25 @@ void init_irq(void)
 */
 void init_pic(void)
 {
-  outb(PIC1,ICW1);   //send initialization code words 1 to PIC1
+  outb(PIC1, ICW1); //send initialization code words 1 to PIC1
   io_wait();
-  outb(PIC2,ICW1);   //send icw1 to PIC2
+  outb(PIC2, ICW1); //send icw1 to PIC2
   io_wait();
-  outb(PIC1+1,0x20); //icw2: remap irq0 to 32
+  outb(PIC1 + 1, 0x20); //icw2: remap irq0 to 32
   io_wait();
-  outb(PIC2+1,0x28); //icw2: remap irq8 to 40
+  outb(PIC2 + 1, 0x28); //icw2: remap irq8 to 40
   io_wait();
-  outb(PIC1+1,4);    //icw3
+  outb(PIC1 + 1, 4); //icw3
   io_wait();
-  outb(PIC2+1,2);    //icw3
+  outb(PIC2 + 1, 2); //icw3
   io_wait();
-  outb(PIC1+1,ICW4); //icw4: 80x86, automatic handling
+  outb(PIC1 + 1, ICW4); //icw4: 80x86, automatic handling
   io_wait();
-  outb(PIC2+1,ICW4); //icw4: 80x86, automatic handling
+  outb(PIC2 + 1, ICW4); //icw4: 80x86, automatic handling
   io_wait();
-  outb(PIC1+1,0xFF); //disable irqs for PIC1
+  outb(PIC1 + 1, 0xFF); //disable irqs for PIC1
   io_wait();
-  outb(PIC2+1,0xFF); //disable irqs for PIC2
+  outb(PIC2 + 1, 0xFF); //disable irqs for PIC2
 }
 
 /**
@@ -144,11 +145,12 @@ void init_pic(void)
   @param context *registers
 */
 
-pcb *cop = NULL; //current operating process
+pcb *cop = NULL;            //current operating process
 context *oldContext = NULL; //old context from caller
 
-u32int* sys_call(context* registers)
+u32int *sys_call(context *registers)
 {
+  pcb *temp2 = NULL;
   if (cop == NULL)
   {
     oldContext = registers;
@@ -160,7 +162,7 @@ u32int* sys_call(context* registers)
     {
       cop->topStack = (unsigned char *)registers;
       cop->state = READY;
-      insertPCB(cop);
+      temp2 = cop;
     }
     else if (params.op_code == EXIT) // free cop
     {
@@ -175,14 +177,22 @@ u32int* sys_call(context* registers)
     removePCB(cop);
     cop->state = RUNNING;
 
+    if (temp2 != NULL)
+      insertPCB(temp2);
+
     println_message("");
 
     return (u32int *)(cop->topStack);
   }
   else
   {
-    return (u32int *) oldContext;
+    return (u32int *)oldContext;
   }
+}
+
+char *getCOP()
+{
+  return cop->name;
 }
 
 void do_divide_error()

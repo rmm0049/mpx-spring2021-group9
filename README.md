@@ -5,8 +5,6 @@ Ryan Mraz
 
 Matthew Winston
 
-Joshua Glover
-
 Abdulrahman Al Otaibi
 
 James Higgins
@@ -15,4 +13,4 @@ James Higgins
 This project is about building a primitive operating system that includes a command line interface, process management and memory management
 
 ## Version
-Version R1
+Version R5

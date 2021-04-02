@@ -13,10 +13,16 @@
 #include "settime.h"
 #include "setdate.h"
 #include "commands.h"
+#include "alias_func.h"
 #include "temp_func.h"
 #include "queue.h"
+#include "pcb_func.h"
 #include "perm_pcb_comm.h"
 #include "loadr3.h"
+#include "alarm.h"
+#include "alarmList.h"
+#include "loadcomhand.h"
+#include "memComm.h"
 #include <core/serial.h>
 #include <string.h>
 
@@ -26,7 +32,6 @@
 
 */
 
-
 int comhandler()
 {
   char cmdBuffer[BUFFER];
@@ -35,13 +40,16 @@ int comhandler()
   int shutdown_flag = 0;
   int count;
 
-  sys_req(WRITE, COM1, "\n\x1b[32mFor a list of commands, type \x1b[0mcommands\n", &count);
-
   while (!quit)
   {
     memset(cmdBuffer, '\0', 100);
     bufferSize = 99;
     sys_req(READ, COM1, cmdBuffer, &bufferSize);
+
+    //check if an alias was entered, then changes cmdBuffer to aliastext
+    if (!isAliasListEmpty()){
+      identifyAlias(cmdBuffer);
+    }
 
     /*
       Commands for R1
@@ -49,12 +57,12 @@ int comhandler()
     */
 
     //version command
-    if (strncmp("version",cmdBuffer,7) == 0)
+    if (strncmp("version", cmdBuffer, 7) == 0)
     {
       version();
     }
     //commands command
-    else if (strncmp("commands",cmdBuffer,8) == 0)
+    else if (strncmp("commands", cmdBuffer, 8) == 0)
     {
       commands();
     }
@@ -64,14 +72,16 @@ int comhandler()
       simple_print("\x1b[0;0f");
     }
     //shutdown command
-    else if ((strncmp("shutdown",cmdBuffer,8) == 0) || (shutdown_flag == 1))
+    else if ((strncmp("shutdown", cmdBuffer, 8) == 0) || (shutdown_flag == 1))
     {
       int i;
-      int valid = 1; //make sure valid command
+      int valid = 1;                          //make sure valid command
       for (i = 9; i < strlen(cmdBuffer); i++) //checks for whitespace
       {
-        if (cmdBuffer[i] == '\0' || isspace(&cmdBuffer[i])); //can be space or null character
-        else{
+        if (cmdBuffer[i] == '\0' || isspace(&cmdBuffer[i]))
+          ; //can be space or null character
+        else
+        {
           println_error("COMMAND NOT RECOGNIZED");
           valid = 0;
           break;
@@ -85,20 +95,29 @@ int comhandler()
       {
         println_warning("Are you sure you want to shutdown? Y/N");
         shutdown_flag = 1;
-
       }
       else
       {
-        if (strncmp("Y", cmdBuffer,1) == 0 || strncmp("y", cmdBuffer,1) == 0) // if Y then quit command handler
+        if (strncmp("Y", cmdBuffer, 1) == 0 || strncmp("y", cmdBuffer, 1) == 0) // if Y then quit command handler
         {
-          quit = 1;
+          if (findPCB("infinite") != NULL)
+          {
+            println_error("infinite process still running!");
+          }
+          else
+          {
+            quit = 1;
+            deletePCB("idle");
+            if (findPCB("alarm") != NULL)
+              deletePCB("alarm");
+            sys_req(EXIT, COM1, NULL, NULL);
+          }
         }
         else // if not shutdown, reset the shutdown flag back to 0
         {
           shutdown_flag = 0;
         }
       }
-
     }
     //help command
     else if (strncmp("help", cmdBuffer, 4) == 0)
@@ -112,8 +131,10 @@ int comhandler()
       int i;
       for (i = 8; i < strlen(cmdBuffer); i++) //checks for whitespace
       {
-        if (cmdBuffer[i] == '\0' || isspace(&cmdBuffer[i])); //can be space or null character
-        else{
+        if (cmdBuffer[i] == '\0' || isspace(&cmdBuffer[i]))
+          ; //can be space or null character
+        else
+        {
           sys_req(WRITE, COM1, "Command not recognized", &count);
           sys_req(WRITE, COM1, "\n", &count);
           valid = 0;
@@ -139,8 +160,10 @@ int comhandler()
       int i;
       for (i = 8; i < strlen(cmdBuffer); i++) //checks for whitespace
       {
-        if (cmdBuffer[i] == '\0' || isspace(&cmdBuffer[i])); //can be space or null character
-        else{
+        if (cmdBuffer[i] == '\0' || isspace(&cmdBuffer[i]))
+          ; //can be space or null character
+        else
+        {
           println_error("Command not recognized");
           valid = 0;
           break;
@@ -158,10 +181,18 @@ int comhandler()
       setdate(cmdBuffer);
     }
 
+    //alias command
+    else if (strncmp("alias", cmdBuffer, 5) == 0){
+      char *alias = strtok(cmdBuffer, " ");
+      alias = strtok(NULL, " ");
+      char *aliastext = strtok(NULL, "");
+      addAlias(alias,aliastext);
+    }
+
     //temprorary PCB commands
-    else if (strncmp("create PCB", cmdBuffer, 10) == 0)
+    else if (strncmp("delete PCB idle", cmdBuffer, 15) == 0)
     {
-      createPCB(cmdBuffer);
+      println_error("Can't manipulate system process!");
     }
     else if (strncmp("delete PCB", cmdBuffer, 10) == 0)
     {
@@ -170,15 +201,36 @@ int comhandler()
       delete = strtok(NULL, " ");
       deletePCB(delete);
     }
-    else if (strncmp("block", cmdBuffer, 5) == 0)
-    {
-      blockPCB(cmdBuffer);
-    }
-    else if (strncmp("unblock", cmdBuffer, 7) == 0)
-    {
-        unblockPCB(cmdBuffer);
-    }
 
+    else if (strncmp("isEmpty", cmdBuffer, 7) == 0)
+    {
+      isEmptyComm();
+    }
+    // else if (strncmp("allocate", cmdBuffer, 8) == 0)
+    // {
+    //   if (!getMemModule())
+    //     break;
+    //   char *temp = strtok(cmdBuffer, " ");
+    //   temp = strtok(NULL, " ");
+    //   allocateMem(atoi(temp));
+    // }
+    // else if (strncmp("free", cmdBuffer, 4) == 0)
+    // {
+    //   if (!getMemModule())
+    //     break;
+    //   char *temp = strtok(cmdBuffer, " ");
+    //   temp = strtok(NULL, " ");
+    //   freeMem(temp);
+    // }
+
+    else if (strncmp("show free", cmdBuffer, 9) == 0)
+    {
+      showFree();
+    }
+    else if (strncmp("show allocated", cmdBuffer, 14) == 0)
+    {
+      showAllocated();
+    }
     //permanent PCB commands
     else if (strncmp("show ready", cmdBuffer, 10) == 0)
     {
@@ -208,7 +260,7 @@ int comhandler()
       resume = strtok(NULL, " ");
       resumePCB(resume);
     }
-    else if (strncmp("set priority", cmdBuffer,12) == 0)
+    else if (strncmp("set priority", cmdBuffer, 12) == 0)
     {
       //split cmd buffer to gather process name and priority
       char *proc_name, *number;
@@ -222,28 +274,48 @@ int comhandler()
       setPCBPriority(proc_name, num_int);
     }
 
-    else if (strncmp("yield", cmdBuffer, 5) == 0)
-    {
-      asm volatile("int $60");
-    }
-
     else if (strncmp("loadr3", cmdBuffer, 6) == 0)
     {
       loadproc();
     }
 
+    else if (strncmp("alarm", cmdBuffer, 5) == 0)
+    {
+      if (findPCB("alarm") == NULL)
+      {
+        updateAlarm(cmdBuffer);
+        loadAlarm();
+      }
+      else
+      {
+        updateAlarm(cmdBuffer);
+      }
+    }
+    else if (strncmp("infinite", cmdBuffer, 8) == 0)
+    {
+      if (findPCB("infinite") == NULL)
+        loadInfinite();
+    }
+    else if (strncmp("init heap", cmdBuffer, 9) == 0)
+    {
+      //temp command to initialize heap to 1000 bytes
+      initHeap(1000);
+    }
+
     //user just presses enter, doesn't enter anything
-    else if (strncmp("\r",cmdBuffer,1) == 0) {} //do nothing
+    else if (strncmp("\r", cmdBuffer, 1) == 0)
+    {
+    } //do nothing
 
     //command not recognized
     else
     {
       println_error("Command not recognized");
-
     }
 
+    if (!shutdown_flag)
+      sys_req(IDLE, COM1, NULL, NULL);
   }
-
 
   return 0;
 }

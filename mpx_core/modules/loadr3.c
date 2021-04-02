@@ -14,19 +14,13 @@
 
 void loadproc()
 {
-  //pcb creations
-  // createPCB("create PCB system proc1 1");
-  // createPCB("create PCB application proc2 2");
-  // createPCB("create PCB system proc3 3");
-  // createPCB("create PCB application proc4 4");
-  // createPCB("create PCB system proc5 5");
 
   //pcb pointers
   pcb *pcb1 = setupPCB("proc1", 1, 1);
-  pcb *pcb2 = setupPCB("proc2", 1, 2);
-  pcb *pcb3 = setupPCB("proc3", 1, 3);
-  pcb *pcb4 = setupPCB("proc4", 1, 4);
-  pcb *pcb5 = setupPCB("proc5", 1, 5);
+  pcb *pcb2 = setupPCB("proc2", 1, 1);
+  pcb *pcb3 = setupPCB("proc3", 1, 1);
+  pcb *pcb4 = setupPCB("proc4", 1, 1);
+  pcb *pcb5 = setupPCB("proc5", 1, 1);
 
   //context creations
   context *cp1 = (context *) (pcb1->topStack);

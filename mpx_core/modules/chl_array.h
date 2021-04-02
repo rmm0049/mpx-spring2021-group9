@@ -1,6 +1,6 @@
 /**
-  @file queue.h
-  Defines the struct of a queue to use for storing the Command History
+  @file chl_array.h
+  Defines the struct of the array to use for storing the Command History
 */
 
 #ifndef _CHL_ARRAY_H

@@ -27,7 +27,15 @@ temp_func.o\
 perm_pcb_comm.o\
 loadr3.o\
 chl_array.o\
-chl_func.o
+chl_func.o\
+alias_array.o\
+alias_func.o\
+loadcomhand.o\
+alarm.o\
+alarmList.o\
+memComm.o\
+memControl.o\
+startup.o
 
 .c.s:
 	$(CC) $(CFLAGS) -S -o $@ $<

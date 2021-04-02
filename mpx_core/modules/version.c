@@ -12,6 +12,6 @@
 */
 int version()
 {
-  println_message("Version R2");
+  println_message("Version R5");
   return 0;
 }

@@ -9,7 +9,6 @@
 #include <core/io.h>
 #include <string.h>
 
-
 /**
   Outputs the current available user commands
 */
@@ -19,7 +18,7 @@ void commands()
   int count = 10;
 
   sys_req(WRITE, COM1, "\x1b[32mAVAILABLE COMMANDS:\n", &count); //change color to green
-  sys_req(WRITE, COM1, "   Current Version:\n", &count); //subsection of version
+  sys_req(WRITE, COM1, "   Current Version:\n", &count);         //subsection of version
   sys_req(WRITE, COM1, "      \x1b[36mversion\n", &count);
 
   sys_req(WRITE, COM1, "   \x1b[32mCommand Usage Help:\n", &count); //subsection of help
@@ -42,11 +41,21 @@ void commands()
   sys_req(WRITE, COM1, "      show all\n", &count);
   sys_req(WRITE, COM1, "      show ready\n", &count);
   sys_req(WRITE, COM1, "      show blocked\n", &count);
-  sys_req(WRITE, COM1, "      create PCB\n", &count);// temprorary PCB
   sys_req(WRITE, COM1, "      delete PCB\n", &count);
-  sys_req(WRITE, COM1, "      block\n", &count);
-  sys_req(WRITE, COM1, "      unblock\n", &count);
 
+  sys_req(WRITE, COM1, "   \x1b[32mMemory Control Blocks:\n", &count);
+  sys_req(WRITE, COM1, "      \x1b[36mshow free\n", &count);
+  sys_req(WRITE, COM1, "      \x1b[36mshow allocated\n", &count);
+
+  sys_req(WRITE, COM1, "   \x1b[32mAlarm:\n", &count);
+  sys_req(WRITE, COM1, "      \x1b[36malarm\n", &count);
+
+  sys_req(WRITE, COM1, "   \x1b[32mProcess Commands:\n", &count);
+  sys_req(WRITE, COM1, "      \x1b[36minfinite\n", &count);
+  sys_req(WRITE, COM1, "      \x1b[36mloadr3\n", &count);
+
+  sys_req(WRITE, COM1, "   \x1b[32mAliasing:\n", &count);
+  sys_req(WRITE, COM1, "      \x1b[36malias\n", &count);
 
   sys_req(WRITE, COM1, "\x1b[0m", &count); //change color back to default
 }
