@@ -31,10 +31,3 @@ void addCHL(char buffer[])
     history.currenti=0;
   }
 }
-/**
-
-
-void dispCHL(int index){
-
-}
-*/

@@ -167,6 +167,14 @@ void help(char *msg)
                  "Loads the 5 processes from R3 into the ready, suspended queue.");
   }
 
+  //help page for alias
+  else if (strncmp("help alias", msg, 10) == 0)
+  {
+    display_help(count, "alias",
+                 "alias [alias] [aliased text]",
+                 "Assigns the given alias with new aliased text.");
+  }
+
   //using help without a command, displays the correct usage of help
   else
   {

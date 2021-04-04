@@ -17,15 +17,6 @@
 
 void addCHL(char buffer[]);
 
-/**
-  displays the CHL at index index of history
-  @param char array
-*/
-/**
-
-
-void dispCHL(int index);
-*/
 
 
 #endif

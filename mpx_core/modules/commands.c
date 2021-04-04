@@ -54,5 +54,8 @@ void commands()
   sys_req(WRITE, COM1, "      \x1b[36minfinite\n", &count);
   sys_req(WRITE, COM1, "      \x1b[36mloadr3\n", &count);
 
+  sys_req(WRITE, COM1, "   \x1b[32mAliasing:\n", &count);
+  sys_req(WRITE, COM1, "      \x1b[36malias\n", &count);
+
   sys_req(WRITE, COM1, "\x1b[0m", &count); //change color back to default
 }
