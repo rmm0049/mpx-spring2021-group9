@@ -60,10 +60,11 @@ int sys_req(int op_code,
     // validate buffer pointer and count pointer
     if (buffer_ptr == NULL)
       return_code = INVALID_BUFFER;
-    // else if (count_ptr == NULL || *count_ptr <= 0){          //Don't know why this is messing
-    //   return_code = INVALID_COUNT;														//up the sys_req WRITE call becasue
-    // serial_println("I am here");														//it thinks the count_ptr is NULL when it's not???
-    // }
+    else if (count_ptr == NULL || *count_ptr <= 0)
+    { //Don't know why this is messing
+      // return_code = INVALID_COUNT; //up the sys_req WRITE call becasue
+      //it thinks the count_ptr is NULL when it's not???
+    }
 
     // if parameters are valid store in the params structure
     if (return_code == 0)
@@ -165,16 +166,16 @@ int sys_free_mem(void *ptr)
 */
 void idle()
 {
-  char msg[30];
-  int count = 0;
+  // char msg[30];
+  // int count = 0;
 
-  memset(msg, '\0', sizeof(msg));
-  strcpy(msg, "IDLE PROCESS EXECUTING.\n");
-  count = strlen(msg);
+  // memset(msg, '\0', sizeof(msg));
+  // strcpy(msg, "IDLE PROCESS EXECUTING.\n");
+  // count = strlen(msg);
 
   while (1)
   {
-    sys_req(WRITE, DEFAULT_DEVICE, msg, &count);
+    //sys_req(WRITE, DEFAULT_DEVICE, msg, &count);
     sys_req(IDLE, DEFAULT_DEVICE, NULL, NULL);
   }
 }

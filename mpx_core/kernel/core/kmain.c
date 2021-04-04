@@ -99,7 +99,7 @@ void kmain(void)
    printStartup();
 
    // 6) Call YOUR command handler -  interface method
-   klogv("Transferring control to commhand...");
+   // klogv("Transferring control to commhand...");
    println_message("\n");
    println_message("Welcome to MPX, enter commands at the command prompt.");
    println_message("Sample commands: help, shutdown, version, gettime, getdate...");

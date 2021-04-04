@@ -180,7 +180,7 @@ u32int *sys_call(context *registers)
     if (temp2 != NULL)
       insertPCB(temp2);
 
-    println_message("");
+    // println_message("");
 
     return (u32int *)(cop->topStack);
   }
