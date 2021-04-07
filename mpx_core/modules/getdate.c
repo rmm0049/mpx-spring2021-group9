@@ -10,7 +10,6 @@
 #include <core/io.h>
 #include <string.h>
 
-
 /**
   Displays the current date on the machine
 */
@@ -20,11 +19,11 @@ void getdate()
   //0x09 bottom two numbers for year
   //0x32 for first two numbers for year
 
-  int count = 10;
+  //int count = 10;
 
   //day of week 0x06
   outb(0x70, 0x06);
-  int week = (int) inb(0x71);
+  int week = (int)inb(0x71);
   int week_dec = BCDToDecimal(week);
   char weeks[2];
   itoa(week_dec, weeks, 10);
@@ -34,62 +33,64 @@ void getdate()
   //conditionals to print the correct day of week
   if (strncmp(weeks, "1", 1) == 0)
   {
-      dayOfWeek[0] = 'S';
-      dayOfWeek[1] = 'u';
-      dayOfWeek[2] = 'n';
+    dayOfWeek[0] = 'S';
+    dayOfWeek[1] = 'u';
+    dayOfWeek[2] = 'n';
   }
   else if (strncmp(weeks, "2", 1) == 0)
   {
-      dayOfWeek[0] = 'M';
-      dayOfWeek[1] = 'o';
-      dayOfWeek[2] = 'n';
+    dayOfWeek[0] = 'M';
+    dayOfWeek[1] = 'o';
+    dayOfWeek[2] = 'n';
   }
   else if (strncmp(weeks, "3", 1) == 0)
   {
-      dayOfWeek[0] = 'T';
-      dayOfWeek[1] = 'u';
-      dayOfWeek[2] = 'e';
+    dayOfWeek[0] = 'T';
+    dayOfWeek[1] = 'u';
+    dayOfWeek[2] = 'e';
   }
   else if (strncmp(weeks, "4", 1) == 0)
   {
-      dayOfWeek[0] = 'W';
-      dayOfWeek[1] = 'e';
-      dayOfWeek[2] = 'd';
+    dayOfWeek[0] = 'W';
+    dayOfWeek[1] = 'e';
+    dayOfWeek[2] = 'd';
   }
   else if (strncmp(weeks, "5", 1) == 0)
   {
-      dayOfWeek[0] = 'T';
-      dayOfWeek[1] = 'h';
-      dayOfWeek[2] = 'u';
+    dayOfWeek[0] = 'T';
+    dayOfWeek[1] = 'h';
+    dayOfWeek[2] = 'u';
   }
   else if (strncmp(weeks, "6", 1) == 0)
   {
-      dayOfWeek[0] = 'F';
-      dayOfWeek[1] = 'r';
-      dayOfWeek[2] = 'i';
+    dayOfWeek[0] = 'F';
+    dayOfWeek[1] = 'r';
+    dayOfWeek[2] = 'i';
   }
   else if (strncmp(weeks, "7", 1) == 0)
   {
-      dayOfWeek[0] = 'S';
-      dayOfWeek[1] = 'a';
-      dayOfWeek[2] = 't';
+    dayOfWeek[0] = 'S';
+    dayOfWeek[1] = 'a';
+    dayOfWeek[2] = 't';
   }
 
-
-  sys_req(WRITE, COM1, dayOfWeek, &count);
+  simple_print(dayOfWeek);
+  // sys_req(WRITE, COM1, dayOfWeek, &count);
 
   //day of month 0x07
   outb(0x70, 0x07);
-  int month_day = (int) inb(0x71);
+  int month_day = (int)inb(0x71);
   int month_day_dec = BCDToDecimal(month_day);
   char month_days[2];
   itoa(month_day_dec, month_days, 10);
-  sys_req(WRITE, COM1, month_days, &count);
-  sys_req(WRITE, COM1, " ", &count);
+  simple_print(month_days);
+  simple_print(" ");
+  // sys_req(WRITE, COM1, month_days, &count);
+  // sys_req(WRITE, COM1, " ", &count);
 
   //month of year 0x08
   outb(0x70, 0x08);
-  int month = (int) inb(0x71);
+  int month = (int)inb(0x71);
   int month_dec = BCDToDecimal(month);
   char months[2];
   itoa(month_dec, months, 10);
@@ -170,19 +171,20 @@ void getdate()
     month_word[2] = 'c';
   }
 
-
-  sys_req(WRITE, COM1, month_word, &count);
+  simple_print(month_word);
+  // sys_req(WRITE, COM1, month_word, &count);
 
   //year (0x09 and 0x32)
   outb(0x70, 0x32);
-  int year_milenium = (int) inb(0x71);
+  int year_milenium = (int)inb(0x71);
   int year_milenium_dec = BCDToDecimal(year_milenium);
   char year_milenium_char[2];
   itoa(year_milenium_dec, year_milenium_char, 10);
-  sys_req(WRITE, COM1, year_milenium_char, &count);
+  simple_print(year_milenium_char);
+  // sys_req(WRITE, COM1, year_milenium_char, &count);
 
   outb(0x70, 0x09);
-  int year_decade = (int) inb(0x71);
+  int year_decade = (int)inb(0x71);
   int year_decade_dec = BCDToDecimal(year_decade);
   char year_decade_char[2];
   itoa(year_decade_dec, year_decade_char, 10);
@@ -190,13 +192,13 @@ void getdate()
   //if decade is 00
   if (year_decade_dec == 0)
   {
-    sys_req(WRITE, COM1, "00", &count);
-    sys_req(WRITE, COM1, "\n", &count);
+    println_message("00");
+    // sys_req(WRITE, COM1, "00", &count);
+    // sys_req(WRITE, COM1, "\n", &count);
     return;
   }
 
-  sys_req(WRITE, COM1, year_decade_char, &count);
-  sys_req(WRITE, COM1, "\n", &count);
-
-
+  println_message(year_decade_char);
+  // sys_req(WRITE, COM1, year_decade_char, &count);
+  // sys_req(WRITE, COM1, "\n", &count);
 }

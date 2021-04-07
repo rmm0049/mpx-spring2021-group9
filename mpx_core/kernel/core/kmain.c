@@ -104,7 +104,9 @@ void kmain(void)
    println_message("Welcome to MPX, enter commands at the command prompt.");
    println_message("Sample commands: help, shutdown, version, gettime, getdate...");
    println_message("\n");
-   sys_req(WRITE, COM1, "\n\x1b[32mFor a list of commands, type \x1b[0mcommands\n", NULL);
+
+   println_message("\n\x1b[32mFor a list of commands, type \x1b[0mcommands");
+   //  sys_req(WRITE, COM1, "\n\x1b[32mFor a list of commands, type \x1b[0mcommands\n", &count);
 
    loadComhand();
    loadIdle();

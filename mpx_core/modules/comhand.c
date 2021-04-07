@@ -38,7 +38,7 @@ int comhandler()
   int bufferSize;
   int quit = 0;
   int shutdown_flag = 0;
-  int count;
+  //int count;
 
   while (!quit)
   {
@@ -47,7 +47,8 @@ int comhandler()
     sys_req(READ, COM1, cmdBuffer, &bufferSize);
 
     //check if an alias was entered, then changes cmdBuffer to aliastext
-    if (!isAliasListEmpty()){
+    if (!isAliasListEmpty())
+    {
       identifyAlias(cmdBuffer);
     }
 
@@ -135,8 +136,9 @@ int comhandler()
           ; //can be space or null character
         else
         {
-          sys_req(WRITE, COM1, "Command not recognized", &count);
-          sys_req(WRITE, COM1, "\n", &count);
+          println_error("Command not recognized\n");
+          // sys_req(WRITE, COM1, "Command not recognized", &count);
+          // sys_req(WRITE, COM1, "\n", &count);
           valid = 0;
           break;
         }
@@ -182,11 +184,12 @@ int comhandler()
     }
 
     //alias command
-    else if (strncmp("alias", cmdBuffer, 5) == 0){
+    else if (strncmp("alias", cmdBuffer, 5) == 0)
+    {
       char *alias = strtok(cmdBuffer, " ");
       alias = strtok(NULL, " ");
       char *aliastext = strtok(NULL, "");
-      addAlias(alias,aliastext);
+      addAlias(alias, aliastext);
     }
 
     //temprorary PCB commands

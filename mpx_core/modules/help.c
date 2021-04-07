@@ -178,7 +178,7 @@ void help(char *msg)
   //using help without a command, displays the correct usage of help
   else
   {
-    sys_req(WRITE, COM1, "help usage: help [command]\n", &count);
+    println_message("help usage: help [command]");
   }
 }
 
@@ -189,12 +189,19 @@ void help(char *msg)
 
 void display_help(int count, char *name, char *usage, char *descript)
 {
-
-  sys_req(WRITE, COM1, "\x1b[32mHELP PAGE\n\x1b[36m", &count); //title
-  sys_req(WRITE, COM1, name, &count);
-  sys_req(WRITE, COM1, "\n\n\x1b[32mUsage: \x1b[0m", &count);
-  sys_req(WRITE, COM1, usage, &count);
-  sys_req(WRITE, COM1, "\n\n\x1b[32mDescription: \x1b[0m", &count);
-  sys_req(WRITE, COM1, descript, &count);
-  sys_req(WRITE, COM1, "\n\n", &count);
+  count++; //just to use
+  simple_print("\x1b[32mHELP PAGE\n\x1b[36m");
+  simple_print(name);
+  simple_print("\n\n\x1b[32mUsage: \x1b[0m");
+  simple_print(usage);
+  simple_print("\n\n\x1b[32mDescription: \x1b[0m");
+  simple_print(descript);
+  simple_print("\n\n");
+  // sys_req(WRITE, COM1, "\x1b[32mHELP PAGE\n\x1b[36m", &count); //title
+  // sys_req(WRITE, COM1, name, &count);
+  // sys_req(WRITE, COM1, "\n\n\x1b[32mUsage: \x1b[0m", &count);
+  // sys_req(WRITE, COM1, usage, &count);
+  // sys_req(WRITE, COM1, "\n\n\x1b[32mDescription: \x1b[0m", &count);
+  // sys_req(WRITE, COM1, descript, &count);
+  // sys_req(WRITE, COM1, "\n\n", &count);
 }
