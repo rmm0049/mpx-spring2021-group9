@@ -18,6 +18,7 @@
 #include "modules/temp_func.h"
 #include "modules/perm_pcb_comm.h"
 #include "modules/mpx_supt.h"
+#include <core/iosched.h>
 #include <string.h>
 
 // Programmable Interrupt Controllers
@@ -157,6 +158,7 @@ u32int *sys_call(context *registers)
   }
   else
   {
+    //Determine if event flags are set
 
     if (params.op_code == IDLE) //save context (reassign cop's stack top)
     {
@@ -167,6 +169,12 @@ u32int *sys_call(context *registers)
     else if (params.op_code == EXIT) // free cop
     {
       freePCB(cop);
+    }
+    else if (params.op_code == READ || params.op_code == WRITE)
+    {
+      blockPCB(cop->name);
+      //call the IO scheduler
+      ioSchedulder(cop->name, params.op_code, params.device_id, params.buffer_ptr, params.count_ptr);
     }
   }
 

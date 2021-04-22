@@ -6,7 +6,8 @@
 
 #include "queue.h"
 
-queue readyQueue = {0, NULL, NULL};
-queue readySuspendedQueue = {0, NULL, NULL};
-queue blockedQueue = {0, NULL, NULL};
-queue blockedSuspendedQueue = {0, NULL, NULL};
+queue readyQueue = {0, 0, 0};
+queue readySuspendedQueue = {0, 0, 0};
+queue blockedQueue = {0, 0, 0};
+queue blockedSuspendedQueue = {0, 0, 0};
+queue ioQueue = {0, 0, 0};

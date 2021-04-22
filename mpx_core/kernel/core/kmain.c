@@ -111,7 +111,6 @@ void kmain(void)
    loadComhand();
    loadIdle();
    asm volatile("int $60");
-
    // 7) System Shutdown on return from your command handler
    klogv("Starting system shutdown procedure...");
 
