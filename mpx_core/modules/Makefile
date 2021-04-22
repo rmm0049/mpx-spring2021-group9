@@ -15,7 +15,6 @@ mpx_supt.o\
 comhand.o\
 version.o\
 help.o\
-logo.o\
 gettime.o\
 getdate.o\
 settime.o\
