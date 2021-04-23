@@ -1,0 +1,32 @@
+AVAILABLE COMMANDS:
+   Current Version:
+      version
+   Command Usage Help:
+     help
+   Shutdown Program:
+     shutdown
+  Time and Date:
+      gettime
+      getdate
+      settime
+      setdate
+   Process Control Blocks:
+      suspend
+      resume
+      set priority
+      show
+      show all
+      show ready
+      show blocked
+      delete PCB
+   Memory Control Blocks:
+      show free
+      show allocated
+   Alarm:
+      alarm
+   Process Commands:
+      infinite
+      loadr3
+   Aliasing:
+      alias
+
