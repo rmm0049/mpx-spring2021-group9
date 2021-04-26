@@ -34,7 +34,8 @@ alarm.o\
 alarmList.o\
 memComm.o\
 memControl.o\
-startup.o
+startup.o\
+dcb.o\
 
 .c.s:
 	$(CC) $(CFLAGS) -S -o $@ $<

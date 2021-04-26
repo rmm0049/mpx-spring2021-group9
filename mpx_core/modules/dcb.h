@@ -33,5 +33,5 @@ typedef struct dcb
 } dcb;
 
 extern dcb comPort;
-
+void serial_io();
 #endif

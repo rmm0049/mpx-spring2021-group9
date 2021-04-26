@@ -55,6 +55,7 @@ extern void reserved();
 extern void coprocessor();
 extern void rtc_isr();
 extern void sys_call_isr();
+extern void serial_io_isr();
 
 extern idt_entry idt_entries[256];
 
@@ -110,6 +111,9 @@ void init_irq(void)
 
   //interrupt 60 sys_call_isr
   idt_set_gate(60, (u32int)sys_call_isr, 0x08, 0x8e);
+
+  idt_set_gate(0x24, (u32int)serial_io_isr, 0x08, 0x8e);
+
 }
 
 /*
@@ -174,7 +178,7 @@ u32int *sys_call(context *registers)
     {
       blockPCB(cop->name);
       //call the IO scheduler
-      ioSchedulder(cop->name, params.op_code, params.device_id, params.buffer_ptr, params.count_ptr);
+      ioScheduler(cop->name, params.op_code, params.device_id, params.buffer_ptr, params.count_ptr);
     }
   }
 
