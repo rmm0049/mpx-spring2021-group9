@@ -30,6 +30,8 @@
 #include "modules/memControl.h"
 #include "modules/startup.h"
 
+#include "modules/dcb.h"
+
 void kmain(void)
 {
    extern uint32_t magic;

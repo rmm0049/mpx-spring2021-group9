@@ -248,7 +248,7 @@ int freeMemory(void *memoryPtr)
             allocatedHead->prev = NULL;
         }
     }
-    else
+    else // relinking the nodes
     {
         if (node->next != NULL)
         {

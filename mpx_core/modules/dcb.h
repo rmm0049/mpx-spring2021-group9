@@ -42,7 +42,6 @@ typedef struct dcb
 
 } dcb;
 
-extern dcb comPort;
 void serial_io();
 int com_open(int *e_flag, int baud_rate);
 void pic_mask( char enable);

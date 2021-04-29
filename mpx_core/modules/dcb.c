@@ -1,4 +1,7 @@
 #include "dcb.h"
+#include "core/serial.h"
+#include "core/io.h"
+dcb comPort;
 void serial_io(){
 
 }
@@ -9,7 +12,7 @@ int com_open(int *e_flag, int baud_rate){
 
   outb(device + 1, 0x00); //disable interrupts
   outb(device + 3, 0x80); //set line control register
-  outb(device + 0, 115200/9600); //set bsd least sig bit
+  outb(device + 0, 115200/baud_rate); //set bsd least sig bit
   outb(device + 1, 0x00); //brd most significant bit
   outb(device + 3, 0x03); //lock divisor; 8bits, no parity, one stop
   outb(device + 2, 0xC7); //enable fifo, clear, 14byte threshold
