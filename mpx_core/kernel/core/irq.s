@@ -149,9 +149,7 @@ serial_io_isr:
   push es
   push fs
   push gs
-  push esp
   call serial_io
-  mov esp, eax
   pop gs
   pop fs
   pop es

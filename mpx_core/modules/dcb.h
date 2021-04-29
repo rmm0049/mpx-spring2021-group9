@@ -6,19 +6,29 @@
 #ifndef _DCB_H
 #define _DCB_H
 
+#define PIC_REG 0x20
+#define PIC_EOI 0x20
+#define PIC_MASK 0x21
+#define IRQ_COM1 0x10
 //allocation statuses
 #define AVAILABLE 1
 #define IN_USE 0
 
-//current operation
-#define READ 0
-#define WRITE 1
-#define IDLE 2
+/*!
++enum for the possible dcb states.
+*/
+typedef enum status_t
+{
+
+  STATUS_IDLE,
+  STATUS_READING,
+  STATUS_WRITING
+} status_t;
 
 typedef struct dcb
 {
     int flag;
-    int alloc_status;
+    status_t alloc_status;
     int curr_op;
     int *event_flag;
 
@@ -34,4 +44,8 @@ typedef struct dcb
 
 extern dcb comPort;
 void serial_io();
+int com_open(int *e_flag, int baud_rate);
+void pic_mask( char enable);
+void enable_interrupts();
+void disable_interrupts();
 #endif
