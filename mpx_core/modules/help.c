@@ -34,6 +34,14 @@ void help(char *msg)
                  "Prompts user for either Y/N to shutdown the system.");
   }
 
+  //help page for clear
+  if (strncmp("help clear", msg, 10) == 0)
+  {
+    display_help(count, "clear",
+                 "clear",
+                 "Clears the terminal screen.");
+  }
+
   //help page for gettime
   else if (strncmp("help gettime", msg, 12) == 0)
   {
