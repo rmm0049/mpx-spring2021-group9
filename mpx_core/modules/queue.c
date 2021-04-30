@@ -10,4 +10,3 @@ queue readyQueue = {0, 0, 0};
 queue readySuspendedQueue = {0, 0, 0};
 queue blockedQueue = {0, 0, 0};
 queue blockedSuspendedQueue = {0, 0, 0};
-queue ioQueue = {0, 0, 0};

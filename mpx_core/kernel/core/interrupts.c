@@ -18,7 +18,7 @@
 #include "modules/temp_func.h"
 #include "modules/perm_pcb_comm.h"
 #include "modules/mpx_supt.h"
-#include <core/iosched.h>
+#include "modules/iosched.h"
 #include <string.h>
 
 // Programmable Interrupt Controllers
@@ -174,7 +174,7 @@ u32int *sys_call(context *registers)
     {
       blockPCB(cop->name);
       //call the IO scheduler
-      ioSchedulder(cop->name, params.op_code, params.device_id, params.buffer_ptr, params.count_ptr);
+      // ioSchedulder(cop->name, params.op_code, params.device_id, params.buffer_ptr, params.count_ptr);
     }
   }
 

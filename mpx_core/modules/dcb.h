@@ -11,9 +11,9 @@
 #define IN_USE 0
 
 //current operation
-#define READ 0
-#define WRITE 1
-#define IDLE 2
+#define READ_DEV 0
+#define WRITE_DEV 1
+#define IDLE_DEV 2
 
 typedef struct dcb
 {
@@ -32,6 +32,6 @@ typedef struct dcb
 
 } dcb;
 
-extern dcb comPort;
+extern dcb comOne;
 
 #endif

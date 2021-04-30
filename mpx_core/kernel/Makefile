@@ -20,7 +20,6 @@ core/system.o\
 core/tables.o\
 mem/paging.o\
 mem/heap.o\
-core/iosched.o\
 
 
 .s.o:

@@ -29,6 +29,7 @@
 #include "modules/lmcb.h"
 #include "modules/memControl.h"
 #include "modules/startup.h"
+#include "modules/dcb.h"
 
 void kmain(void)
 {
@@ -107,6 +108,12 @@ void kmain(void)
 
    println_message("\n\x1b[32mFor a list of commands, type \x1b[0mcommands");
    //  sys_req(WRITE, COM1, "\n\x1b[32mFor a list of commands, type \x1b[0mcommands\n", &count);
+
+   /// global definition of com1 device
+   dcb comOne;
+   comOne.alloc_status = AVAILABLE;
+   comOne.event_flag = NULL;
+   comOne.curr_op = IDLE_DEV;
 
    loadComhand();
    loadIdle();

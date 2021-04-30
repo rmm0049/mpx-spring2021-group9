@@ -15,6 +15,7 @@
 #include <mem/heap.h>
 #include <string.h>
 #include <core/serial.h>
+#include "dcb.h"
 
 /// global variable containing parameter used when making system calls via sys_req
 param params;
