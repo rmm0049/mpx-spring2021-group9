@@ -35,8 +35,7 @@ alarmList.o\
 memComm.o\
 memControl.o\
 startup.o\
-iosched.o\
-ioqueue.o
+dcb.o\
 
 .c.s:
 	$(CC) $(CFLAGS) -S -o $@ $<

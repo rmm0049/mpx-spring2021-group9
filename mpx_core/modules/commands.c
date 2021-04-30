@@ -20,11 +20,13 @@ void commands()
   println_message("   Current Version:");
   println_message("      \x1b[36mversion");
   println_message("   \x1b[32mCommand Usage Help:");
-  println_message("     \x1b[36mhelp");
-
+  println_message("      \x1b[36mhelp");
   println_message("   \x1b[32mShutdown Program:");
-  println_message("     \x1b[36mshutdown");
-  println_message("  \x1b[32mTime and Date:");
+  println_message("      \x1b[36mshutdown");
+  println_message("   \x1b[32mClear Screen:");
+  println_message("      \x1b[36mclear");
+
+  println_message("   \x1b[32mTime and Date:");
   println_message("      \x1b[36mgettime");
   println_message("      getdate");
   println_message("      settime");

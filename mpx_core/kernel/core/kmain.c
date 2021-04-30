@@ -31,6 +31,8 @@
 #include "modules/startup.h"
 #include "modules/dcb.h"
 
+#include "modules/dcb.h"
+
 void kmain(void)
 {
    extern uint32_t magic;
@@ -70,6 +72,7 @@ void kmain(void)
    init_idt();
 
    init_irq();
+   init_pic();
 
    //enables interrupts
    sti();
@@ -95,6 +98,8 @@ void kmain(void)
    initializeHeap(50000);
    sys_set_free(freeMemory);
    sys_set_malloc((void *)allocateMemory);
+   int flag = 0;
+   com_open(&flag, 9600);
 
    //prints startup screen
    printStartup();
