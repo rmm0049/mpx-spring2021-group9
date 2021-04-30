@@ -36,6 +36,7 @@ memComm.o\
 memControl.o\
 startup.o\
 dcb.o\
+iosched.o
 
 .c.s:
 	$(CC) $(CFLAGS) -S -o $@ $<

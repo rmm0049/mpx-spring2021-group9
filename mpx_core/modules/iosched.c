@@ -14,9 +14,9 @@
  * @return none
  * */
 
-#include <modules/dcb.h>
-#include "modules/iocb.h"
-#include "modules/queue.h"
+// #include <modules/dcb.h>
+// #include "modules/iocb.h"
+// #include "modules/queue.h"
 
 void ioScheduler(char *proc, int opCode, int deviceId, char *buffPtr, int *countPtr)
 {
